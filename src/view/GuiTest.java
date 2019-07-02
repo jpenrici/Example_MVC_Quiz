@@ -24,9 +24,9 @@ public class GuiTest extends javax.swing.JFrame {
         panelTop = new javax.swing.JPanel();
         lblUser = new javax.swing.JLabel();
         btnUser = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
         tablePanel = new javax.swing.JTabbedPane();
         panelTest = new javax.swing.JPanel();
+        lblTimer = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbOptions = new javax.swing.JTable();
         lblImage = new javax.swing.JLabel();
@@ -39,11 +39,11 @@ public class GuiTest extends javax.swing.JFrame {
         btnNext = new javax.swing.JButton();
         btnFinish = new javax.swing.JButton();
         btnReview = new javax.swing.JButton();
+        lblTimerText = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("TESTE");
         setAlwaysOnTop(true);
-        setPreferredSize(new java.awt.Dimension(996, 695));
         setResizable(false);
 
         lblUser.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
@@ -54,18 +54,12 @@ public class GuiTest extends javax.swing.JFrame {
         btnUser.setText("Voltar ao Login");
         btnUser.setToolTipText("Fecha o teste atual sem salvar resultados.");
 
-        jLabel1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jLabel1.setText("Tempo Restante:  00:00:00");
-        jLabel1.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-
         javax.swing.GroupLayout panelTopLayout = new javax.swing.GroupLayout(panelTop);
         panelTop.setLayout(panelTopLayout);
         panelTopLayout.setHorizontalGroup(
             panelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelTopLayout.createSequentialGroup()
-                .addComponent(lblUser, javax.swing.GroupLayout.PREFERRED_SIZE, 528, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
-                .addComponent(jLabel1)
+                .addComponent(lblUser, javax.swing.GroupLayout.DEFAULT_SIZE, 790, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnUser, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -73,11 +67,10 @@ public class GuiTest extends javax.swing.JFrame {
             panelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                 .addComponent(lblUser, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jLabel1)
                 .addComponent(btnUser))
         );
 
-        panelTopLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnUser, jLabel1, lblUser});
+        panelTopLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnUser, lblUser});
 
         tablePanel.setToolTipText("");
         tablePanel.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -85,6 +78,12 @@ public class GuiTest extends javax.swing.JFrame {
 
         panelTest.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         panelTest.setAutoscrolls(true);
+
+        lblTimer.setFont(new java.awt.Font("Arial Black", 0, 18)); // NOI18N
+        lblTimer.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblTimer.setText("00:00:00");
+        lblTimer.setToolTipText("Tempo para encerrar o teste!");
+        lblTimer.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         tbOptions.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         tbOptions.setModel(new javax.swing.table.DefaultTableModel(
@@ -143,7 +142,7 @@ public class GuiTest extends javax.swing.JFrame {
         btnNext.setText("Avançar >>");
         btnNext.setToolTipText("Ir para a próxima questão.");
 
-        btnFinish.setText("Sair");
+        btnFinish.setText("Salvar e Sair");
         btnFinish.setToolTipText("Sair do teste e salvar respostas.");
 
         btnReview.setText("Revisar");
@@ -183,6 +182,12 @@ public class GuiTest extends javax.swing.JFrame {
 
         panelBtnLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnClean, btnFinish, btnNext, btnPrevious, btnReview});
 
+        lblTimerText.setFont(new java.awt.Font("Arial Black", 0, 18)); // NOI18N
+        lblTimerText.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblTimerText.setText("Tempo Restante:");
+        lblTimerText.setToolTipText("Tempo para encerrar o teste!");
+        lblTimerText.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
         javax.swing.GroupLayout panelTestLayout = new javax.swing.GroupLayout(panelTest);
         panelTest.setLayout(panelTestLayout);
         panelTestLayout.setHorizontalGroup(
@@ -191,30 +196,44 @@ public class GuiTest extends javax.swing.JFrame {
             .addGroup(panelTestLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblInform, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(lblInform, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panelBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTestLayout.createSequentialGroup()
-                .addComponent(lblImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 439, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(lblImage, javax.swing.GroupLayout.DEFAULT_SIZE, 508, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(panelTestLayout.createSequentialGroup()
+                        .addComponent(lblTimerText)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblTimer, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 439, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
         panelTestLayout.setVerticalGroup(
             panelTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelTestLayout.createSequentialGroup()
-                .addGroup(panelTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 331, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(panelTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(panelTestLayout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addGroup(panelTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                            .addComponent(lblTimerText, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblTimer, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 333, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblInform, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblInform, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
-        panelTestLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jScrollPane2, lblImage});
+        panelTestLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {lblTimer, lblTimerText});
+
+        lblTimer.getAccessibleContext().setAccessibleName("Timer");
 
         tablePanel.addTab("TESTE", panelTest);
 
@@ -284,11 +303,12 @@ public class GuiTest extends javax.swing.JFrame {
     public javax.swing.JButton btnPrevious;
     public javax.swing.JButton btnReview;
     public javax.swing.JButton btnUser;
-    public javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     public javax.swing.JLabel lblImage;
     public javax.swing.JLabel lblInform;
+    public javax.swing.JLabel lblTimer;
+    public javax.swing.JLabel lblTimerText;
     public javax.swing.JLabel lblUser;
     private javax.swing.JPanel panelBtn;
     public javax.swing.JPanel panelTest;

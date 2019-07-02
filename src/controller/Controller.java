@@ -81,11 +81,10 @@ public class Controller {
             + "\nÉ possível acompanhar as respostas pela aba Resumo.\n"
             + "O resumo estará bloqueado se o teste for uma Avaliação!\n"
             + "\nClique na aba Teste para iniciar.\n"
-            + "\nQuando terminar clique em Sair para que as respostas"
+            + "\nQuando terminar clique em Salvar e Sair para que as respostas"
             + " sejam salvas em um arquivo."
             + "\n\nBoa Sorte!";
-    private static final String LBLTIMER = "Tempo Restante: ";
-    private static final int PLAYTIMER = 50;
+    private static final int PLAYTIMER = 1;    // segundos por questão
 
     public Controller() {
         groups = new HashMap<>();
@@ -129,19 +128,24 @@ public class Controller {
 
         // controlador de tempo
         countTime = PLAYTIMER;
-        timer = new Timer(500, (ActionEvent e) -> {
+        timer = new Timer(1000, (ActionEvent e) -> {
             if (started) {
                 countTime--;
             }
             if (countTime >= 0) {
-                guiTest.jLabel1.setText(convert(countTime));
+                guiTest.lblTimer.setText(convert(countTime));
             } else {
-                inform("Tempo Esgotado", "Tempo Esgotado");
+                JOptionPane.showMessageDialog(null,
+                        "Não é possível alterar as respostas!",
+                        "Tempo Esgotado!",
+                        JOptionPane.PLAIN_MESSAGE);
                 ((Timer) (e.getSource())).stop();
+                guiTest.btnClean.setEnabled(false);
+                guiTest.btnNext.setEnabled(false);
+                guiTest.btnPrevious.setEnabled(false);
+                guiTest.btnReview.setEnabled(false);
             }
         });
-        timer.setInitialDelay(0);
-        timer.start();
 
         checkBaseFiles();
         loadData();
@@ -271,9 +275,16 @@ public class Controller {
     private void login() {
         currentQuestion = 1;
         currentTheme = "";
-        countTime = PLAYTIMER;
         started = false;
+        countTime = PLAYTIMER;
+        timer.setInitialDelay(0);
+        timer.start();        
+        guiTest.btnClean.setEnabled(true);
+        guiTest.btnNext.setEnabled(true);
+        guiTest.btnPrevious.setEnabled(true);
+        guiTest.btnReview.setEnabled(false);
         guiLogin.setVisible(true);
+        guiTest.setVisible(false);
     }
 
     private void closeLogin() {
@@ -331,6 +342,11 @@ public class Controller {
                 }
             } catch (IOException ex) {
             }
+
+            // atualiza o tempo
+            countTime = PLAYTIMER * (currentTest.size() - 1);
+            System.out.println(countTime);
+            
             guiTest.tablePanel.setSelectedIndex(2);
             guiTest.lblUser.setText(currentUser + " : " + currentGroup);
             guiLogin.setVisible(false);
@@ -344,12 +360,6 @@ public class Controller {
                 exitLogin();
             }
         }
-    }
-
-    private void closeTest() {
-        guiTest.setVisible(false);
-        guiLogin.setVisible(true);
-        System.out.println("close Test ...");
     }
 
     private boolean loadQuestions(String arquivo) {
@@ -519,35 +529,34 @@ public class Controller {
     }
 
     private void finalizeTest() {
-        if (inform("Teste será salvo com as respostas atuais.\nDeseja encerrar?",
-                "Fechar Teste")) {
-            ArrayList answers = new ArrayList<>();
-            answers.add(currentUser + Util.DELIM + currentGroup
-                    + Util.DELIM + currentTheme);
-            answers.add("Questão" + Util.DELIM + "Resposta Esperada"
-                    + Util.DELIM + "Resposta Usuário" + Util.DELIM + "Situação");
-            for (int i = 1; i < currentTest.size(); i++) {
-                Question q = currentTest.get(i);
-                String output = q.getNumber() + Util.DELIM;
-                output += q.getAnswer() + Util.DELIM;
-                if (q.getCurrentAnswer() == -1) {
-                    output += "nulo" + Util.DELIM;
-                } else {
-                    output += q.getCurrentAnswer() + Util.DELIM;
-                }
-                if (q.getHit()) {
-                    output += "acertou";
-                } else {
-                    output += "errou";
-                }
-                answers.add(output);
+        started = false;
+
+        ArrayList answers = new ArrayList<>();
+        answers.add(currentUser + Util.DELIM + currentGroup
+                + Util.DELIM + currentTheme);
+        answers.add("Questão" + Util.DELIM + "Resposta Esperada"
+                + Util.DELIM + "Resposta Usuário" + Util.DELIM + "Situação");
+        for (int i = 1; i < currentTest.size(); i++) {
+            Question q = currentTest.get(i);
+            String output = q.getNumber() + Util.DELIM;
+            output += q.getAnswer() + Util.DELIM;
+            if (q.getCurrentAnswer() == -1) {
+                output += "nulo" + Util.DELIM;
+            } else {
+                output += q.getCurrentAnswer() + Util.DELIM;
             }
+            if (q.getHit()) {
+                output += "acertou";
+            } else {
+                output += "errou";
+            }
+            answers.add(output);
+
             try {
                 String path = pathAnswers + currentUser.replace(" ", "-")
                         + "-" + currentTheme.replace(" ", "-") + ".csv";
                 Util.export(answers, path);
                 System.out.println("exported " + path + " ...");
-                closeTest();
                 login();
             } catch (IOException ex) {
                 System.out.println("error while exporting file ...");
@@ -597,7 +606,7 @@ public class Controller {
             if (source == guiTest.btnNext) {
                 updateSavedResponses();
                 currentQuestion++;
-                started= true;
+                started = true;
                 updateQuestion();
             }
             if (source == guiTest.btnReview) {
@@ -605,13 +614,20 @@ public class Controller {
                 updateQuestion();
             }
             if (source == guiTest.btnFinish) {
-                finalizeTest();
+                if (inform("Teste será salvo com as respostas atuais.\nDeseja encerrar?",
+                        "Fechar Teste")) {
+                    finalizeTest();
+                } else {
+                    started = true;
+                }
             }
             if (source == guiTest.btnUser) {
+                started = false;
                 if (inform("As respostas não serão salvas!"
                         + "\nDeseja trocar o usuário?", "Trocar Usuário")) {
-                    closeTest();
                     login();
+                } else {
+                    started = true;
                 }
             }
         }
@@ -665,9 +681,29 @@ public class Controller {
             super.paintComponent(g);
         }
     }
-    
+
     private String convert(int count) {
-        String str = "Tempo Restante: " + Integer.toString(count);
+        String str = "";
+        int minutos = count / 60;
+        int segundos = count % 60;
+        String strMinutos = Integer.toString(minutos);
+        String strSegundos = Integer.toString(segundos);
+
+        if (minutos < 10) {
+            strMinutos = "0" + strMinutos;
+        }
+
+        if (segundos < 10) {
+            strSegundos = "0" + strSegundos;
+        }
+
+        if (count > 60) {
+            str += strMinutos + " : " + strSegundos;
+            //guiTest.lblTimer.set
+        } else {
+            str += strSegundos;
+        }
+
         return str;
     }
 }
