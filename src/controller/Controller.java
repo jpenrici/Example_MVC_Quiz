@@ -1,5 +1,6 @@
 package controller;
 
+import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -64,6 +65,7 @@ public class Controller {
     private int currentHits;
     private int currentNumberOfIssues;
     private boolean started;
+    private boolean congratulations;
     private boolean answered;
     private boolean seeAll;
 
@@ -80,11 +82,14 @@ public class Controller {
             + "Para alterar uma resposta é necessário Limpar a questão primeiro.\n"
             + "\nÉ possível acompanhar as respostas pela aba Resumo.\n"
             + "O resumo estará bloqueado se o teste for uma Avaliação!\n"
-            + "\nClique na aba Teste para iniciar.\n"
+            + "\nQuando for Teste de Treinamento será feita uma contagem de tempo.\n"
+            + "A contagem regressiva iniciará quando escolher a primeira alternativa!\n"
+            + "Se o tempo acabar não será possível alterar as respostas!\n"
+            + "\nClique na aba Teste para visualizar as questões.\n"
             + "\nQuando terminar clique em Salvar e Sair para que as respostas"
             + " sejam salvas em um arquivo."
             + "\n\nBoa Sorte!";
-    private static final int PLAYTIMER = 1;    // segundos por questão
+    private static final int PLAYTIMER = 40;    // segundos por questão
 
     public Controller() {
         groups = new HashMap<>();
@@ -141,9 +146,9 @@ public class Controller {
                         JOptionPane.PLAIN_MESSAGE);
                 ((Timer) (e.getSource())).stop();
                 guiTest.btnClean.setEnabled(false);
-                guiTest.btnNext.setEnabled(false);
-                guiTest.btnPrevious.setEnabled(false);
-                guiTest.btnReview.setEnabled(false);
+                guiTest.btnNext.setEnabled(true);
+                guiTest.btnPrevious.setEnabled(true);
+                guiTest.btnReview.setEnabled(true);
             }
         });
 
@@ -276,9 +281,10 @@ public class Controller {
         currentQuestion = 1;
         currentTheme = "";
         started = false;
+        congratulations = false;
         countTime = PLAYTIMER;
         timer.setInitialDelay(0);
-        timer.start();        
+        timer.start();
         guiTest.btnClean.setEnabled(true);
         guiTest.btnNext.setEnabled(true);
         guiTest.btnPrevious.setEnabled(true);
@@ -346,7 +352,7 @@ public class Controller {
             // atualiza o tempo
             countTime = PLAYTIMER * (currentTest.size() - 1);
             System.out.println(countTime);
-            
+
             guiTest.tablePanel.setSelectedIndex(2);
             guiTest.lblUser.setText(currentUser + " : " + currentGroup);
             guiLogin.setVisible(false);
@@ -525,6 +531,20 @@ public class Controller {
             }
 
             txtAreaSummary.setText(summary);
+
+            if (currentHits == currentNumberOfIssues && started) {
+                guiTest.tablePanel.setSelectedIndex(1);
+                started = false;
+                congratulations = true;
+                guiTest.btnClean.setEnabled(false);
+                guiTest.btnNext.setEnabled(true);
+                guiTest.btnPrevious.setEnabled(true);
+                guiTest.btnReview.setEnabled(true);
+                if (inform("Acertou todas as perguntas.\nDeseja salvar e encerrar?",
+                        "PARABÉNS")) {
+                    finalizeTest();
+                }
+            }
         }
     }
 
@@ -606,7 +626,6 @@ public class Controller {
             if (source == guiTest.btnNext) {
                 updateSavedResponses();
                 currentQuestion++;
-                started = true;
                 updateQuestion();
             }
             if (source == guiTest.btnReview) {
@@ -614,11 +633,12 @@ public class Controller {
                 updateQuestion();
             }
             if (source == guiTest.btnFinish) {
+                started = false;
                 if (inform("Teste será salvo com as respostas atuais.\nDeseja encerrar?",
                         "Fechar Teste")) {
                     finalizeTest();
                 } else {
-                    started = true;
+                    started = true && !congratulations;
                 }
             }
             if (source == guiTest.btnUser) {
@@ -627,7 +647,7 @@ public class Controller {
                         + "\nDeseja trocar o usuário?", "Trocar Usuário")) {
                     login();
                 } else {
-                    started = true;
+                    started = true && !congratulations;
                 }
             }
         }
@@ -637,6 +657,11 @@ public class Controller {
 
         @Override
         public void mouseClicked(MouseEvent ev) {
+            int optionSaved = currentTest.get(currentQuestion).getCurrentAnswer();
+            if (optionSaved == -1) {
+                System.out.println("Contagem regressiva liberada...");
+                started = true;
+            }
         }
 
         @Override
@@ -697,13 +722,21 @@ public class Controller {
             strSegundos = "0" + strSegundos;
         }
 
-        if (count > 60) {
+        if (count > 90) {
             str += strMinutos + " : " + strSegundos;
-            //guiTest.lblTimer.set
+            guiTest.lblTimer.setForeground(Color.black);
         } else {
-            str += strSegundos;
+            if (count > 60) {
+                str += strMinutos + " : " + strSegundos;
+            } else {
+                str += "00 : " + strSegundos;
+            }
+            if ((count % 2) == 0) {
+                guiTest.lblTimer.setForeground(Color.black);
+            } else {
+                guiTest.lblTimer.setForeground(Color.red);
+            }
         }
-
         return str;
     }
 }
