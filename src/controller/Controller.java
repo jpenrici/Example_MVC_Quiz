@@ -1,6 +1,7 @@
 package controller;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -16,6 +17,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -24,8 +26,13 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.Timer;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 import model.Question;
 import view.GuiTest;
 import view.Login;
@@ -92,11 +99,16 @@ public class Controller {
     private static final int PLAYTIMER = 40;    // segundos por questão
 
     public Controller() {
+        // dados
         groups = new HashMap<>();
         users = new HashMap<>();
         availableTests = new HashMap<>();
+
+        // GUI Login
         guiLogin = new Login();
-        guiLogin.ouvirLogin(new ActionsGuiLogin());
+        guiLogin.listenLogin(new ActionsGuiLogin());
+
+        // GUI Teste
         guiTest = new GuiTest();
         guiTest.eventTest(new ActionsGuiTest());
         guiTest.eventOptions(new ActionsGuiTestTable());
@@ -107,6 +119,7 @@ public class Controller {
             }
         });
 
+        // resumo
         txtAreaSummary = new BackGroundTextArea();
         txtAreaSummary.setText("");
         txtAreaSummary.setEditable(false);
@@ -119,6 +132,7 @@ public class Controller {
         jScrollPaneSummary.setViewportView(txtAreaSummary);
         guiTest.tablePanel.addTab("RESUMO", jScrollPaneSummary);
 
+        // informe (help)
         txtAreaHelp = new BackGroundTextArea();
         txtAreaHelp.setText(HELP);
         txtAreaHelp.setEditable(false);
@@ -131,7 +145,7 @@ public class Controller {
         jScrollPaneHelp.setViewportView(txtAreaHelp);
         guiTest.tablePanel.addTab("INFORMAÇÕES GERAIS", jScrollPaneHelp);
 
-        // controlador de tempo
+        // contagem de tempo
         countTime = PLAYTIMER;
         timer = new Timer(1000, (ActionEvent e) -> {
             if (started) {
@@ -152,6 +166,7 @@ public class Controller {
             }
         });
 
+        // iniciar
         checkBaseFiles();
         loadData();
         login();
@@ -243,7 +258,7 @@ public class Controller {
 
     private void updateAvaliableThemes() {
         String selectedGroup = String.valueOf(guiLogin.cboxGroup.getSelectedItem());
-        System.out.println("Temas de " + selectedGroup + " ...");
+        System.out.println("theme ... " + selectedGroup + " ...");
 
         if (selectedGroup == null) {
             return;
@@ -278,13 +293,14 @@ public class Controller {
     }
 
     private void login() {
+        // nova rodada
         currentQuestion = 1;
         currentTheme = "";
-        started = false;
-        congratulations = false;
-        countTime = PLAYTIMER;
-        timer.setInitialDelay(0);
-        timer.start();
+        started = false;            // contagem de tempo liberada = falso
+        congratulations = false;    // acertou todas as respostas = falso
+        countTime = PLAYTIMER;      // tempo mínimo por questão em segundos
+        timer.setInitialDelay(0); 
+        timer.start();              // iniciar objeto Timer
         guiTest.btnClean.setEnabled(true);
         guiTest.btnNext.setEnabled(true);
         guiTest.btnPrevious.setEnabled(true);
@@ -301,6 +317,7 @@ public class Controller {
             currentUser = "usuário";
         }
 
+        // checar testes disponíveis para o grupo escolhido
         String file = "";
         if (Util.fileExists(pathAvailableTests)) {
             ArrayList<String> array = Util.loadFile(pathAvailableTests);
@@ -314,7 +331,6 @@ public class Controller {
                 }
             }
         }
-
         System.out.println("check questions ... " + file + "...");
         if (Util.fileExists(pathQuestions + file)) {
             if (guiLogin.cboxTheme.isEnabled()) {
@@ -338,9 +354,9 @@ public class Controller {
 
     private void startTest(String currentGroup, String currentUser,
             String file) {
-        if (loadQuestions(file)) {
+        if (loadQuestions(file)) { // carregar questões
             String pathBg = pathImagesGui + "background.png";
-            try {
+            try { // alterar background da aba resumo e informe (help)
                 Image image = ImageIO.read(new File(pathBg));
                 if (image != null) {
                     txtAreaSummary.setBackgroundImage(image);
@@ -349,15 +365,18 @@ public class Controller {
             } catch (IOException ex) {
             }
 
-            // atualiza o tempo
+            // atualizar o tempo para contagem regressiva
             countTime = PLAYTIMER * (currentTest.size() - 1);
-            System.out.println(countTime);
+            System.out.println("updated time ... " + countTime + "seconds");
 
-            guiTest.tablePanel.setSelectedIndex(2);
+            // preparar GUI Teste
+            guiTest.tablePanel.setSelectedIndex(2); // abrir em help
             guiTest.lblUser.setText(currentUser + " : " + currentGroup);
             guiLogin.setVisible(false);
             guiTest.setVisible(true);
             answered = false;
+            
+            // atualizar questão
             updateQuestion();
         } else {
             String str = "Não há teste para:\n" + currentGroup
@@ -368,11 +387,11 @@ public class Controller {
         }
     }
 
-    private boolean loadQuestions(String arquivo) {
-        System.out.println("Carregar questões ...");
+    private boolean loadQuestions(String file) {
+        System.out.println("load questions ...");
         boolean emptyQuestions = true;
         currentTest = new ArrayList<>();
-        ArrayList<String> questions = Util.loadFile(arquivo);
+        ArrayList<String> questions = Util.loadFile(file);
 
         String[] str = questions.get(0).split(Util.DELIM);
         Question q = new Question(0, str[0], null, null);
@@ -395,7 +414,6 @@ public class Controller {
                 }
             }
         }
-
         return !emptyQuestions;
     }
 
@@ -405,35 +423,38 @@ public class Controller {
         }
         if (currentQuestion >= currentTest.size() - 1) {
             currentQuestion = currentTest.size() - 1;
-            guiTest.btnReview.setEnabled(true);
+            guiTest.btnReview.setEnabled(true); // ativar botão revisar
         } else {
             guiTest.btnReview.setEnabled(false);
         }
 
-        // atualiza questão
+        // atualizar questão
         String str = "Questão " + currentTest.get(currentQuestion).getNumber()
-                + ") " + currentTest.get(currentQuestion).getQuestion();
+                + " de " + Integer.toString(currentTest.size() - 1) + ":\n"
+                + currentTest.get(currentQuestion).getQuestion();
         guiTest.txtAreaQuestion.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
         guiTest.txtAreaQuestion.setText(str);
 
-        // atualiza alternativas na tabela
+        // atualizar alternativas na tabela
         updateOptions(currentTest.get(currentQuestion).getCurrentAnswer());
 
-        // atualiza informe
+        // atualizar informe (help)
         updateReports();
 
-        // atualiza imagem da questão
+        // atualizar imagem da questão
         updateImageQuestion();
 
-        // atualiza o resumo com as respostas
+        // atualizar o resumo com as respostas
         updateSummary();
     }
 
     private void updateSavedResponses() {
+        // salvar a resposta escolhida pelo usuário
         int optionSaved = currentTest.get(currentQuestion).getCurrentAnswer();
-        int row = guiTest.tbOptions.getSelectedRow();
-        if (optionSaved == -1) {
+        int row = guiTest.tbOptions.getSelectedRow();   // alternativa
+        if (optionSaved == -1) { // se questão sem resposta, atualizar
             currentTest.get(currentQuestion).setCurrentAnswer(row);
+            // checar se a resposta escolhida está certa
             if (currentTest.get(currentQuestion).getAnswer().equals(String.valueOf(row))) {
                 currentTest.get(currentQuestion).setHit(true);
             } else {
@@ -443,6 +464,7 @@ public class Controller {
     }
 
     private void updateOptions(int chosenOption) {
+        // atualizar alternativas no JTable
         ArrayList<String> options = currentTest.get(currentQuestion).getOptions();
         String[][] elements = new String[options.size()][1];
         for (int i = 0; i < options.size(); i++) {
@@ -453,19 +475,24 @@ public class Controller {
             }
         }
 
-        guiTest.tbOptions.setModel(new javax.swing.table.DefaultTableModel(
-                elements, new String[]{
-                    "Alternativas para questão "
-                    + String.valueOf(currentTest.get(currentQuestion).getNumber())
-                }
+        guiTest.tbOptions.setModel(new DefaultTableModel(elements, new String[]{
+            "Alternativas para questão "
+            + String.valueOf(currentTest.get(currentQuestion).getNumber())
+        }
         ) {
-            boolean[] canEdit = new boolean[]{
-                false
-            };
+            boolean[] canEdit = new boolean[]{false};
         });
+
+        // atualizar cor das linhas
+        Enumeration<TableColumn> en = guiTest.tbOptions.getColumnModel().getColumns();
+        while (en.hasMoreElements()) {
+            TableColumn tc = en.nextElement();
+            tc.setCellRenderer(new OptionsColor());
+        }
     }
 
     private void updateReports() {
+        // atualizar informe sobre a questão
         int optionSaved = currentTest.get(currentQuestion).getCurrentAnswer();
         if (optionSaved == -1) {
             guiTest.lblInform.setText("Questão sem resposta!"
@@ -500,6 +527,7 @@ public class Controller {
     }
 
     private void updateSummary() {
+        // atualizar resumo
         if (!currentTest.get(0).getQuestion().equals(TEST)) {
             txtAreaSummary.setText(ALERT);
         } else {
@@ -533,7 +561,7 @@ public class Controller {
             txtAreaSummary.setText(summary);
 
             if (currentHits == currentNumberOfIssues && started) {
-                guiTest.tablePanel.setSelectedIndex(1);
+                //guiTest.tablePanel.setSelectedIndex(1);
                 started = false;
                 congratulations = true;
                 guiTest.btnClean.setEnabled(false);
@@ -549,8 +577,9 @@ public class Controller {
     }
 
     private void finalizeTest() {
-        started = false;
-
+        started = false; // parar contagem regressiva
+        
+        // salvar respostas no arquivo de saída
         ArrayList answers = new ArrayList<>();
         answers.add(currentUser + Util.DELIM + currentGroup
                 + Util.DELIM + currentTheme);
@@ -591,6 +620,7 @@ public class Controller {
     }
 
     class ActionsGuiLogin implements ActionListener {
+        // controle dos botões do GUI Login
 
         @Override
         public void actionPerformed(ActionEvent ev) {
@@ -609,6 +639,7 @@ public class Controller {
     }
 
     class ActionsGuiTest implements ActionListener {
+        // controle dos botões do GUI Teste
 
         @Override
         public void actionPerformed(ActionEvent ev) {
@@ -654,6 +685,7 @@ public class Controller {
     }
 
     class ActionsGuiTestTable implements MouseListener {
+        // controle de seleção de alternativas
 
         @Override
         public void mouseClicked(MouseEvent ev) {
@@ -681,7 +713,8 @@ public class Controller {
         }
     }
 
-    static class BackGroundTextArea extends JTextArea {
+    private class BackGroundTextArea extends JTextArea {
+        // alterar cor de JTextArea
 
         private Image backgroundImage;
 
@@ -707,7 +740,33 @@ public class Controller {
         }
     }
 
+    private class OptionsColor extends DefaultTableCellRenderer
+            implements TableCellRenderer {
+        // alterar cor das alternativas na JTable
+
+        Color optionColor = new Color(0, 152, 152);     // azul
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table,
+                Object value, boolean isSelected, boolean hasFocus,
+                int row, int column) {
+            setBackground(null);
+            super.getTableCellRendererComponent(table, value, isSelected,
+                    hasFocus, row, column);
+            setText(String.valueOf(value));
+            
+            // checar se questão tem alternativa salva
+            if (row == currentTest.get(currentQuestion).getCurrentAnswer()) {
+                setBackground(optionColor);
+            } else {
+                setBackground(null);
+            }
+            return this;
+        }
+    }
+
     private String convert(int count) {
+        // contagem de tempo em minutos:segundos
         String str = "";
         int minutos = count / 60;
         int segundos = count % 60;
@@ -722,6 +781,7 @@ public class Controller {
             strSegundos = "0" + strSegundos;
         }
 
+        // alertar em cor quando chegar a 1:30 do final
         if (count > 90) {
             str += strMinutos + " : " + strSegundos;
             guiTest.lblTimer.setForeground(Color.black);

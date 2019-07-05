@@ -174,7 +174,7 @@ public class Login extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     // Métodos personalizados
-    public void ouvirLogin(ActionListener ev) {
+    public void listenLogin(ActionListener ev) {
         this.btnLogin.addActionListener(ev);
         this.btnQuit.addActionListener(ev);
         this.cboxGroup.addActionListener(ev);
