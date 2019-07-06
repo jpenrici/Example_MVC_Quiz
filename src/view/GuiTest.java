@@ -34,11 +34,11 @@ public class GuiTest extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         txtAreaQuestion = new javax.swing.JTextArea();
         panelBtn = new javax.swing.JPanel();
-        btnClean = new javax.swing.JButton();
+        btnFirst = new javax.swing.JButton();
         btnPrevious = new javax.swing.JButton();
         btnNext = new javax.swing.JButton();
         btnFinish = new javax.swing.JButton();
-        btnReview = new javax.swing.JButton();
+        btnLast = new javax.swing.JButton();
         lblTimerText = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -112,6 +112,7 @@ public class GuiTest extends javax.swing.JFrame {
         tbOptions.setToolTipText("Clique em um item para selecionar.");
         tbOptions.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         tbOptions.setRowHeight(20);
+        tbOptions.setSelectionForeground(new java.awt.Color(0, 0, 204));
         tbOptions.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tbOptions);
 
@@ -133,8 +134,8 @@ public class GuiTest extends javax.swing.JFrame {
         txtAreaQuestion.setMargin(new java.awt.Insets(10, 10, 10, 10));
         jScrollPane2.setViewportView(txtAreaQuestion);
 
-        btnClean.setText("Limpar");
-        btnClean.setToolTipText("Limpar a resposta armazenada desta questão.");
+        btnFirst.setText("Primeira");
+        btnFirst.setToolTipText("Ir para a primeira questão.");
 
         btnPrevious.setText("<< Voltar");
         btnPrevious.setToolTipText("Voltar para a questão anterior.");
@@ -145,42 +146,41 @@ public class GuiTest extends javax.swing.JFrame {
         btnFinish.setText("Salvar e Sair");
         btnFinish.setToolTipText("Sair do teste e salvar respostas.");
 
-        btnReview.setText("Revisar");
-        btnReview.setToolTipText("Ir para a primeira questão.");
+        btnLast.setText("Última");
+        btnLast.setToolTipText("Ir para a última questão.");
 
         javax.swing.GroupLayout panelBtnLayout = new javax.swing.GroupLayout(panelBtn);
         panelBtn.setLayout(panelBtnLayout);
         panelBtnLayout.setHorizontalGroup(
             panelBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelBtnLayout.createSequentialGroup()
-                .addComponent(btnClean, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnFirst, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnPrevious, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnNext, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 220, Short.MAX_VALUE)
-                .addComponent(btnReview, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnLast, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnFinish, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        panelBtnLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnClean, btnFinish, btnNext, btnPrevious, btnReview});
+        panelBtnLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnFinish, btnFirst, btnLast, btnNext, btnPrevious});
 
         panelBtnLayout.setVerticalGroup(
             panelBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBtnLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(panelBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnReview, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(panelBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                        .addComponent(btnClean, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnPrevious, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnNext, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnFinish, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(panelBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(btnFirst, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnPrevious, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnNext, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnFinish, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnLast, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
-        panelBtnLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnClean, btnFinish, btnNext, btnPrevious, btnReview});
+        panelBtnLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnFinish, btnFirst, btnLast, btnNext, btnPrevious});
 
         lblTimerText.setFont(new java.awt.Font("Arial Black", 0, 18)); // NOI18N
         lblTimerText.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -297,11 +297,11 @@ public class GuiTest extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    public javax.swing.JButton btnClean;
     public javax.swing.JButton btnFinish;
+    public javax.swing.JButton btnFirst;
+    public javax.swing.JButton btnLast;
     public javax.swing.JButton btnNext;
     public javax.swing.JButton btnPrevious;
-    public javax.swing.JButton btnReview;
     public javax.swing.JButton btnUser;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -326,9 +326,9 @@ public class GuiTest extends javax.swing.JFrame {
     public void eventTest(ActionListener ev) {
         this.btnNext.addActionListener(ev);
         this.btnFinish.addActionListener(ev);
-        this.btnClean.addActionListener(ev);
+        this.btnFirst.addActionListener(ev);
         this.btnUser.addActionListener(ev);
         this.btnPrevious.addActionListener(ev);
-        this.btnReview.addActionListener(ev);
+        this.btnLast.addActionListener(ev);
     }
 }

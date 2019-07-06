@@ -81,12 +81,10 @@ public class Controller {
             + "\nResumo Bloqueado!\n";
     private static final String HELP = "Leia com atenção cada questão.\n"
             + "\nÉ possível ver as questões antes de responder clicando em "
-            + "Avançar e Voltar.\n"
-            + "Ao visualizar a última questão, o botão Revisar estará disponível"
-            + " para retornar a primeira pergunta.\n"
+            + "Avançar, Voltar, ir para a Primeira ou Última.\n"
             + "Ao selecionar uma alternativa clique em Avançar ou Voltar"
-            + " para confirmar a escolha.\n"
-            + "Para alterar uma resposta é necessário Limpar a questão primeiro.\n"
+            + " para mudar a questão.\n"
+            + "Para alterar uma resposta basta clicar em outra opção.\n"
             + "\nÉ possível acompanhar as respostas pela aba Resumo.\n"
             + "O resumo estará bloqueado se o teste for uma Avaliação!\n"
             + "\nQuando for Teste de Treinamento será feita uma contagem de tempo.\n"
@@ -159,10 +157,7 @@ public class Controller {
                         "Tempo Esgotado!",
                         JOptionPane.PLAIN_MESSAGE);
                 ((Timer) (e.getSource())).stop();
-                guiTest.btnClean.setEnabled(false);
-                guiTest.btnNext.setEnabled(true);
-                guiTest.btnPrevious.setEnabled(true);
-                guiTest.btnReview.setEnabled(true);
+                started = false;
             }
         });
 
@@ -299,12 +294,8 @@ public class Controller {
         started = false;            // contagem de tempo liberada = falso
         congratulations = false;    // acertou todas as respostas = falso
         countTime = PLAYTIMER;      // tempo mínimo por questão em segundos
-        timer.setInitialDelay(0); 
+        timer.setInitialDelay(0);
         timer.start();              // iniciar objeto Timer
-        guiTest.btnClean.setEnabled(true);
-        guiTest.btnNext.setEnabled(true);
-        guiTest.btnPrevious.setEnabled(true);
-        guiTest.btnReview.setEnabled(false);
         guiLogin.setVisible(true);
         guiTest.setVisible(false);
     }
@@ -375,7 +366,7 @@ public class Controller {
             guiLogin.setVisible(false);
             guiTest.setVisible(true);
             answered = false;
-            
+
             // atualizar questão
             updateQuestion();
         } else {
@@ -423,9 +414,6 @@ public class Controller {
         }
         if (currentQuestion >= currentTest.size() - 1) {
             currentQuestion = currentTest.size() - 1;
-            guiTest.btnReview.setEnabled(true); // ativar botão revisar
-        } else {
-            guiTest.btnReview.setEnabled(false);
         }
 
         // atualizar questão
@@ -448,19 +436,27 @@ public class Controller {
         updateSummary();
     }
 
-    private void updateSavedResponses() {
+    private void updateSavedResponses(int row) {
         // salvar a resposta escolhida pelo usuário
         int optionSaved = currentTest.get(currentQuestion).getCurrentAnswer();
-        int row = guiTest.tbOptions.getSelectedRow();   // alternativa
         if (optionSaved == -1) { // se questão sem resposta, atualizar
             currentTest.get(currentQuestion).setCurrentAnswer(row);
-            // checar se a resposta escolhida está certa
-            if (currentTest.get(currentQuestion).getAnswer().equals(String.valueOf(row))) {
-                currentTest.get(currentQuestion).setHit(true);
-            } else {
-                currentTest.get(currentQuestion).setHit(false);
+        } else {
+            if (optionSaved != row) {
+                if (inform("Deseja trocar a alternativa?", "Atenção")) {
+                    currentTest.get(currentQuestion).setCurrentAnswer(row);
+                }
             }
         }
+        // checar se a resposta escolhida está certa
+        if (currentTest.get(currentQuestion).getAnswer().equals(String.valueOf(row))) {
+            currentTest.get(currentQuestion).setHit(true);
+        } else {
+            currentTest.get(currentQuestion).setHit(false);
+        }
+        updateOptions(currentTest.get(currentQuestion).getCurrentAnswer());
+        updateSummary();
+        updateReports();
     }
 
     private void updateOptions(int chosenOption) {
@@ -493,18 +489,22 @@ public class Controller {
 
     private void updateReports() {
         // atualizar informe sobre a questão
+        String info;
         int optionSaved = currentTest.get(currentQuestion).getCurrentAnswer();
         if (optionSaved == -1) {
-            guiTest.lblInform.setText("Questão sem resposta!"
-                    + " Selecione uma alternativa ou"
-                    + " Avançar (Voltar) para ver outra questão.");
+            info = "Questão sem resposta!";
+            if (!congratulations && (countTime >= 0)) {
+                info += " Selecione uma alternativa.";
+            }                 
         } else {
-            String info = "Alternativa Selecionada [ ";
+            info = "Alternativa Selecionada [ ";
             info += String.valueOf(currentTest.get(currentQuestion).getCurrentAnswer() + 1);
-            info += " ]. Para alterar clique em LIMPAR ";
-            info += "e selecione outra alternativa.";
-            guiTest.lblInform.setText(info);
+            info += " ]. ";
+            if (!congratulations && (countTime >= 0)) {
+                info += "Para alterar selecione outra alternativa.";
+            }
         }
+        guiTest.lblInform.setText(info);
     }
 
     private void updateImageQuestion() {
@@ -564,10 +564,6 @@ public class Controller {
                 //guiTest.tablePanel.setSelectedIndex(1);
                 started = false;
                 congratulations = true;
-                guiTest.btnClean.setEnabled(false);
-                guiTest.btnNext.setEnabled(true);
-                guiTest.btnPrevious.setEnabled(true);
-                guiTest.btnReview.setEnabled(true);
                 if (inform("Acertou todas as perguntas.\nDeseja salvar e encerrar?",
                         "PARABÉNS")) {
                     finalizeTest();
@@ -578,7 +574,7 @@ public class Controller {
 
     private void finalizeTest() {
         started = false; // parar contagem regressiva
-        
+
         // salvar respostas no arquivo de saída
         ArrayList answers = new ArrayList<>();
         answers.add(currentUser + Util.DELIM + currentGroup
@@ -644,23 +640,20 @@ public class Controller {
         @Override
         public void actionPerformed(ActionEvent ev) {
             Object source = ev.getSource();
-            if (source == guiTest.btnClean) {
-                currentTest.get(currentQuestion).setHit(false);
-                currentTest.get(currentQuestion).setCurrentAnswer(-1);
+            if (source == guiTest.btnFirst) {
+                currentQuestion = 1;
                 updateQuestion();
             }
             if (source == guiTest.btnPrevious) {
-                updateSavedResponses();
                 currentQuestion--;
                 updateQuestion();
             }
             if (source == guiTest.btnNext) {
-                updateSavedResponses();
                 currentQuestion++;
                 updateQuestion();
             }
-            if (source == guiTest.btnReview) {
-                currentQuestion = 1;
+            if (source == guiTest.btnLast) {
+                currentQuestion = currentTest.size() - 1;
                 updateQuestion();
             }
             if (source == guiTest.btnFinish) {
@@ -689,10 +682,10 @@ public class Controller {
 
         @Override
         public void mouseClicked(MouseEvent ev) {
-            int optionSaved = currentTest.get(currentQuestion).getCurrentAnswer();
-            if (optionSaved == -1) {
-                System.out.println("Contagem regressiva liberada...");
-                started = true;
+            started = true && !congratulations && (countTime >= 0);
+            System.out.println("count status ..." + started);
+            if (started) {
+                updateSavedResponses(guiTest.tbOptions.getSelectedRow());
             }
         }
 
@@ -754,7 +747,7 @@ public class Controller {
             super.getTableCellRendererComponent(table, value, isSelected,
                     hasFocus, row, column);
             setText(String.valueOf(value));
-            
+
             // checar se questão tem alternativa salva
             if (row == currentTest.get(currentQuestion).getCurrentAnswer()) {
                 setBackground(optionColor);

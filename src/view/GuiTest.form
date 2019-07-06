@@ -249,6 +249,9 @@
                       <Color id="Cursor em Forma de M&#xe3;o"/>
                     </Property>
                     <Property name="rowHeight" type="int" value="20"/>
+                    <Property name="selectionForeground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="cc" green="0" red="0" type="rgb"/>
+                    </Property>
                     <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
                       <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
                     </Property>
@@ -315,14 +318,14 @@
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="btnClean" linkSize="5" min="-2" pref="140" max="-2" attributes="0"/>
+                          <Component id="btnFirst" linkSize="5" min="-2" pref="140" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="btnPrevious" linkSize="5" min="-2" pref="140" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="btnNext" linkSize="5" min="-2" pref="140" max="-2" attributes="0"/>
-                          <EmptySpace pref="220" max="32767" attributes="0"/>
-                          <Component id="btnReview" linkSize="5" min="-2" pref="140" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="btnLast" linkSize="5" min="-2" pref="140" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                           <Component id="btnFinish" linkSize="5" min="-2" pref="140" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -331,14 +334,12 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace max="32767" attributes="0"/>
-                          <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="btnReview" linkSize="7" min="-2" pref="40" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="2" attributes="0">
-                                  <Component id="btnClean" linkSize="7" alignment="2" min="-2" pref="42" max="-2" attributes="0"/>
-                                  <Component id="btnPrevious" linkSize="7" alignment="2" min="-2" pref="42" max="-2" attributes="0"/>
-                                  <Component id="btnNext" linkSize="7" alignment="2" min="-2" pref="42" max="-2" attributes="0"/>
-                                  <Component id="btnFinish" linkSize="7" alignment="2" min="-2" pref="42" max="-2" attributes="0"/>
-                              </Group>
+                          <Group type="103" groupAlignment="2" attributes="0">
+                              <Component id="btnFirst" linkSize="7" alignment="2" min="-2" pref="42" max="-2" attributes="0"/>
+                              <Component id="btnPrevious" linkSize="7" alignment="2" min="-2" pref="42" max="-2" attributes="0"/>
+                              <Component id="btnNext" linkSize="7" alignment="2" min="-2" pref="42" max="-2" attributes="0"/>
+                              <Component id="btnFinish" linkSize="7" alignment="2" min="-2" pref="42" max="-2" attributes="0"/>
+                              <Component id="btnLast" linkSize="7" alignment="2" min="-2" pref="40" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -346,10 +347,10 @@
                 </DimensionLayout>
               </Layout>
               <SubComponents>
-                <Component class="javax.swing.JButton" name="btnClean">
+                <Component class="javax.swing.JButton" name="btnFirst">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Limpar"/>
-                    <Property name="toolTipText" type="java.lang.String" value="Limpar a resposta armazenada desta quest&#xe3;o."/>
+                    <Property name="text" type="java.lang.String" value="Primeira"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Ir para a primeira quest&#xe3;o."/>
                   </Properties>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
@@ -382,10 +383,10 @@
                     <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
                   </AuxValues>
                 </Component>
-                <Component class="javax.swing.JButton" name="btnReview">
+                <Component class="javax.swing.JButton" name="btnLast">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Revisar"/>
-                    <Property name="toolTipText" type="java.lang.String" value="Ir para a primeira quest&#xe3;o."/>
+                    <Property name="text" type="java.lang.String" value="&#xda;ltima"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Ir para a &#xfa;ltima quest&#xe3;o."/>
                   </Properties>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
