@@ -11,7 +11,10 @@ import java.io.PrintWriter;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -41,6 +44,7 @@ public class Util {
         return array;
     }
 
+    @SuppressWarnings("ConvertToTryWithResources")
     protected static void export(ArrayList<String> array, String path)
             throws IOException {
         System.out.println(path + " exist ... " + fileExists(path) + " ...");
@@ -95,10 +99,16 @@ public class Util {
 
         return new String(outputData);
     }
-    
+
     protected static boolean isWin() {
         String so = (String) System.getProperties().get("os.name");
         System.out.println("S.O.: " + so);
         return !so.equalsIgnoreCase("Linux");
+    }
+
+    protected static String timeNow() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        Date date = new Date();
+        return dateFormat.format(date);
     }
 }

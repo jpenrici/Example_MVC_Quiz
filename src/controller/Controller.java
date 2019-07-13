@@ -77,6 +77,7 @@ public class Controller {
     private boolean seeAll;
 
     private static final String TEST = "Test";
+    private static final String GUEST = "Visitante";
     private static final String ALERT = "Teste configurado como Avaliação!"
             + "\nResumo Bloqueado!\n";
     private static final String HELP = "Leia com atenção cada questão.\n"
@@ -290,6 +291,8 @@ public class Controller {
     private void login() {
         // nova rodada
         currentQuestion = 1;
+        currentGroup = "Grupo";
+        currentUser = "Usuário";
         currentTheme = "";
         started = false;            // contagem de tempo liberada = falso
         congratulations = false;    // acertou todas as respostas = falso
@@ -298,6 +301,7 @@ public class Controller {
         timer.start();              // iniciar objeto Timer
         guiLogin.setVisible(true);
         guiTest.setVisible(false);
+        guiTest.lblUser.setText(currentUser + " : " + currentGroup);
     }
 
     private void closeLogin() {
@@ -329,7 +333,7 @@ public class Controller {
             }
             System.out.println(currentUser + " : " + currentGroup + " : "
                     + currentTheme + " : " + pathQuestions + file);
-            startTest(currentGroup, currentUser, pathQuestions + file);
+            startTest(pathQuestions + file);
         } else {
             if (inform("Não há teste para:\n" + currentGroup
                     + "\nDeseja encerrar?", "Atenção!")) {
@@ -343,8 +347,7 @@ public class Controller {
         System.exit(0);
     }
 
-    private void startTest(String currentGroup, String currentUser,
-            String file) {
+    private void startTest(String file) {
         if (loadQuestions(file)) { // carregar questões
             String pathBg = pathImagesGui + "background.png";
             try { // alterar background da aba resumo e informe (help)
@@ -362,13 +365,22 @@ public class Controller {
 
             // preparar GUI Teste
             guiTest.tablePanel.setSelectedIndex(2); // abrir em help
-            guiTest.lblUser.setText(currentUser + " : " + currentGroup);
             guiLogin.setVisible(false);
             guiTest.setVisible(true);
             answered = false;
 
+            // visitante, solicitar nome
+            if (currentUser.equalsIgnoreCase(GUEST)) {
+                currentUser = JOptionPane.showInputDialog("Digite seu nome:");
+                if (currentUser.isEmpty()) {
+                    currentUser = "Usuário Visitante";
+                }
+            }
+            guiTest.lblUser.setText(currentUser + " : " + currentGroup);
+
             // atualizar questão
             updateQuestion();
+
         } else {
             String str = "Não há teste para:\n" + currentGroup
                     + "\nTema: " + currentTheme;
@@ -383,6 +395,17 @@ public class Controller {
         boolean emptyQuestions = true;
         currentTest = new ArrayList<>();
         ArrayList<String> questions = Util.loadFile(file);
+
+        // embaralhar questões
+        ArrayList<String> temp = new ArrayList<>();
+        for (int i = 1; i < questions.size(); i++) {
+            temp.add(questions.get(i));
+        }
+        Collections.shuffle(temp);
+        System.out.println("shuffle list ...");
+        for (int i = 0; i < temp.size(); i++) {
+            questions.set(i + 1, temp.get(i));
+        }
 
         String[] str = questions.get(0).split(Util.DELIM);
         Question q = new Question(0, str[0], null, null);
@@ -495,7 +518,7 @@ public class Controller {
             info = "Questão sem resposta!";
             if (!congratulations && (countTime >= 0)) {
                 info += " Selecione uma alternativa.";
-            }                 
+            }
         } else {
             info = "Alternativa Selecionada [ ";
             info += String.valueOf(currentTest.get(currentQuestion).getCurrentAnswer() + 1);
@@ -596,16 +619,17 @@ public class Controller {
                 output += "errou";
             }
             answers.add(output);
+        }
 
-            try {
-                String path = pathAnswers + currentUser.replace(" ", "-")
-                        + "-" + currentTheme.replace(" ", "-") + ".csv";
-                Util.export(answers, path);
-                System.out.println("exported " + path + " ...");
-                login();
-            } catch (IOException ex) {
-                System.out.println("error while exporting file ...");
-            }
+        try {
+            String path = pathAnswers + currentUser.replace(" ", "-")
+                    + "-" + currentTheme.replace(" ", "-");
+            path += "_" + Util.timeNow() +  ".csv";
+            Util.export(answers, path);
+            System.out.println("exported " + path + " ...");
+            login();
+        } catch (IOException ex) {
+            System.out.println("error while exporting file ...");
         }
     }
 
@@ -613,6 +637,7 @@ public class Controller {
         int dialogResult = JOptionPane.showConfirmDialog(guiTest,
                 mensagem, titulo, JOptionPane.YES_NO_OPTION);
         return dialogResult == 0;
+
     }
 
     class ActionsGuiLogin implements ActionListener {
