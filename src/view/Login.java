@@ -29,7 +29,6 @@ public class Login extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Bem vindo!");
-        setAlwaysOnTop(true);
         setMinimumSize(new java.awt.Dimension(500, 145));
         setName("frame_login"); // NOI18N
         setResizable(false);
@@ -174,7 +173,7 @@ public class Login extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     // Métodos personalizados
-    public void listenLogin(ActionListener ev) {
+    public void eventLogin(ActionListener ev) {
         this.btnLogin.addActionListener(ev);
         this.btnQuit.addActionListener(ev);
         this.cboxGroup.addActionListener(ev);

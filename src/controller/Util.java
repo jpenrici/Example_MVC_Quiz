@@ -4,10 +4,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
@@ -26,34 +28,59 @@ public class Util {
 
     protected static ArrayList<String> loadFile(String path) {
         ArrayList<String> array = new ArrayList<>();
+        StringBuilder buffer = new StringBuilder();
+        // ler arquivo
         try {
-            FileReader input = new FileReader(path);
-            BufferedReader buffer = new BufferedReader(input);
-            String line = buffer.readLine();
-            while (line != null) {
-                if (ISWIN) {
-                    line = UTF8toISO(line);
+            FileInputStream input = new FileInputStream(path);
+            InputStreamReader isr = new InputStreamReader(input, "UTF8");
+            try (Reader in = new BufferedReader(isr)) {
+                int ch;
+                while ((ch = in.read()) > -1) {
+                    buffer.append((char) ch);
                 }
-                array.add(line);
-                line = buffer.readLine();
             }
-            input.close();
-        } catch (IOException ex) {
-            System.out.println(path + " ... error!");
+            System.out.println(path + " ok ...");
+        } catch (IOException e) {
+            System.out.println(path + " error ...");
+            return null;
+        }
+        // Converter String em ArrayList
+        String line = "";
+        String text = buffer.toString();
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            if (c == '\n') {
+                array.add(line);
+                line = "";
+            } else {
+                line += c;
+            }
+        }
+        // Adicionar última linha
+        if (!line.equals("")) {
+            array.add(line);
         }
         return array;
     }
-
-    @SuppressWarnings("ConvertToTryWithResources")
-    protected static void export(ArrayList<String> array, String path)
-            throws IOException {
-        System.out.println(path + " exist ... " + fileExists(path) + " ...");
-        FileWriter output = new FileWriter(path);
-        PrintWriter printWriter = new PrintWriter(output);
-        for (int i = 0; i < array.size(); i++) {
-            printWriter.printf("%s\n", array.get(i));
+    
+    protected static void export(String strOut, String path) {
+        try {
+            FileOutputStream output = new FileOutputStream(path);
+            try (Writer out = new OutputStreamWriter(output, "UTF8")) {
+                out.write(strOut);
+            }
+            System.out.println("exported " + path + " ...");
+        } catch (IOException e) {
+            System.out.println("export " + path + " error ...");
         }
-        printWriter.close();
+    }    
+
+    protected static void export(ArrayList<String> array, String path) {
+        String strOut = "";
+        for (int i = 0; i < array.size(); i++) {
+            strOut += array.get(i) + '\n';
+        }
+        export(strOut, path);
     }
 
     protected static Map<String, String> loadMap(String path) {
@@ -73,6 +100,16 @@ public class Util {
         return file.exists();
     }
 
+    protected static boolean createDirectory(String directoryName) {
+        File newDirectory = new File(directoryName);
+        if (!newDirectory.exists()) {
+            newDirectory.mkdir();
+            return false;
+        }
+        return true;
+    }
+
+    @SuppressWarnings("ConvertToTryWithResources")
     protected static String property(String path, String key)
             throws FileNotFoundException {
         Properties props = new Properties();
@@ -107,7 +144,7 @@ public class Util {
     }
 
     protected static String timeNow() {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HHmmss");
         Date date = new Date();
         return dateFormat.format(date);
     }

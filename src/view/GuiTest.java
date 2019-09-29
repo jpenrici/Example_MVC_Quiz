@@ -23,7 +23,6 @@ public class GuiTest extends javax.swing.JFrame {
 
         panelTop = new javax.swing.JPanel();
         lblUser = new javax.swing.JLabel();
-        btnUser = new javax.swing.JButton();
         tablePanel = new javax.swing.JTabbedPane();
         panelTest = new javax.swing.JPanel();
         lblTimer = new javax.swing.JLabel();
@@ -40,37 +39,28 @@ public class GuiTest extends javax.swing.JFrame {
         btnFinish = new javax.swing.JButton();
         btnLast = new javax.swing.JButton();
         lblTimerText = new javax.swing.JLabel();
+        btnUser = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("TESTE");
-        setAlwaysOnTop(true);
         setResizable(false);
 
         lblUser.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         lblUser.setText("Usuário : Grupo");
         lblUser.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
 
-        btnUser.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        btnUser.setText("Voltar ao Login");
-        btnUser.setToolTipText("Fecha o teste atual sem salvar resultados.");
-
         javax.swing.GroupLayout panelTopLayout = new javax.swing.GroupLayout(panelTop);
         panelTop.setLayout(panelTopLayout);
         panelTopLayout.setHorizontalGroup(
             panelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelTopLayout.createSequentialGroup()
-                .addComponent(lblUser, javax.swing.GroupLayout.DEFAULT_SIZE, 790, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnUser, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(lblUser, javax.swing.GroupLayout.PREFERRED_SIZE, 639, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelTopLayout.setVerticalGroup(
             panelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                .addComponent(lblUser, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(btnUser))
+            .addComponent(lblUser, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
-
-        panelTopLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnUser, lblUser});
 
         tablePanel.setToolTipText("");
         tablePanel.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -78,6 +68,7 @@ public class GuiTest extends javax.swing.JFrame {
 
         panelTest.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         panelTest.setAutoscrolls(true);
+        panelTest.setPreferredSize(new java.awt.Dimension(800, 500));
 
         lblTimer.setFont(new java.awt.Font("Arial Black", 0, 18)); // NOI18N
         lblTimer.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -85,7 +76,7 @@ public class GuiTest extends javax.swing.JFrame {
         lblTimer.setToolTipText("Tempo para encerrar o teste!");
         lblTimer.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
-        tbOptions.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        tbOptions.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         tbOptions.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -193,14 +184,8 @@ public class GuiTest extends javax.swing.JFrame {
         panelTestLayout.setHorizontalGroup(
             panelTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1)
-            .addGroup(panelTestLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblInform, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(panelBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTestLayout.createSequentialGroup()
-                .addComponent(lblImage, javax.swing.GroupLayout.DEFAULT_SIZE, 508, Short.MAX_VALUE)
+                .addComponent(lblImage, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(panelTestLayout.createSequentialGroup()
@@ -209,25 +194,31 @@ public class GuiTest extends javax.swing.JFrame {
                         .addComponent(lblTimer, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 439, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTestLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(panelBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblInform, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         panelTestLayout.setVerticalGroup(
             panelTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelTestLayout.createSequentialGroup()
-                .addGroup(panelTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(6, 6, 6)
+                .addGroup(panelTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(panelTestLayout.createSequentialGroup()
-                        .addGap(6, 6, 6)
                         .addGroup(panelTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                             .addComponent(lblTimerText, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblTimer, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 333, Short.MAX_VALUE)))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblInform, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblInform, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -237,31 +228,35 @@ public class GuiTest extends javax.swing.JFrame {
 
         tablePanel.addTab("TESTE", panelTest);
 
+        btnUser.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnUser.setText("Voltar ao Login");
+        btnUser.setToolTipText("Fecha o teste atual sem salvar resultados.");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(panelTop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tablePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(panelTop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnUser, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(tablePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addContainerGap()))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(panelTop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(656, Short.MAX_VALUE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addContainerGap(45, Short.MAX_VALUE)
-                    .addComponent(tablePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap()))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(panelTop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnUser))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tablePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 568, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();

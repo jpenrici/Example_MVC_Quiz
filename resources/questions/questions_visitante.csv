@@ -1,0 +1,18 @@
+Test;local image;answer number;question;answer 0;answer 1;answer 2;
+;;;;;;;
+images_visitante/img_q01.png;0;Plantas;Indique a opção relacionada a imagem:;bonsai;flor;árvore;orquídea;
+;;;;;;;
+images_visitante/img_q02.png;1;Plantas;Indique a opção relacionada a imagem:;bonsai;flor;árvore;orquídea;
+;;;;;;;
+images_visitante/img_q03.png;2;Plantas;Indique a opção relacionada a imagem:;bonsai;flor;árvore;orquídea;
+;;;;;;;
+images_visitante/img_q04.png;3;Plantas;Indique a opção relacionada a imagem:;bonsai;flor;árvore;orquídea;
+;;;;;;;
+images_visitante/img_q05.png;1;Orquídea;Qual a cor predominante na flor da Cattleya?;Amarelo;Vermelho;Branco;Lilás;
+;;;;;;;
+images_visitante/img_q06.png;1;Orquídea;Qual a cor predominante na flor da Cattleya?;Vermelho;Amarelo;Lilás;Branco;
+;;;;;;;
+images_visitante/img_q07.png;0;Orquídea;Qual a cor predominante na flor da Cattleya?;Branco;Lilás;Vermelho;Amarelo;
+;;;;;;;
+images_visitante/img_q08.png;0;Orquídea;Qual a cor predominante na flor da Cattleya?;Lilás;Branco;Amarelo;Vermelho;
+;;;;;;;

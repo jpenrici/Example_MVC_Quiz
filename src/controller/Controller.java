@@ -3,6 +3,8 @@ package controller;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -34,16 +36,19 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import model.Question;
+import view.GuiResult;
 import view.GuiTest;
 import view.Login;
 
 public class Controller {
 
-    private final static String LOCAL = "src/";
+    private final static String LOCAL = "";
+    private final static String ANSWERS = "";
     protected final static String PROP = LOCAL + "resources/pathTests.properties";
 
     private GuiTest guiTest = null;
     private Login guiLogin = null;
+    private GuiResult guiResult = null;
     private final BackGroundTextArea txtAreaHelp;
     private final BackGroundTextArea txtAreaSummary;
 
@@ -82,7 +87,7 @@ public class Controller {
             + "\nResumo Bloqueado!\n";
     private static final String HELP = "Leia com atenção cada questão.\n"
             + "\nÉ possível ver as questões antes de responder clicando em "
-            + "Avançar, Voltar, ir para a Primeira ou Última.\n"
+            + "Avançar, Voltar, Primeira ou Última.\n"
             + "Ao selecionar uma alternativa clique em Avançar ou Voltar"
             + " para mudar a questão.\n"
             + "Para alterar uma resposta basta clicar em outra opção.\n"
@@ -95,7 +100,7 @@ public class Controller {
             + "\nQuando terminar clique em Salvar e Sair para que as respostas"
             + " sejam salvas em um arquivo."
             + "\n\nBoa Sorte!";
-    private static final int PLAYTIMER = 40;    // segundos por questão
+    private static final int PLAYTIMER = 50;    // segundos por questão
 
     public Controller() {
         // dados
@@ -105,18 +110,39 @@ public class Controller {
 
         // GUI Login
         guiLogin = new Login();
-        guiLogin.listenLogin(new ActionsGuiLogin());
+        guiLogin.eventLogin(new ActionsGuiLogin());
+        guiLogin.setAlwaysOnTop(true);
+        guiLogin.setResizable(false);
+
+        // GUI Result
+        guiResult = new GuiResult();
+        guiResult.eventResult(new ActionsGuiResult());
+        guiResult.setAlwaysOnTop(false);
+        guiResult.setPreferredSize(new Dimension(800, 500));        
+        guiResult.txtAreaSummary.setText("");
 
         // GUI Teste
         guiTest = new GuiTest();
         guiTest.eventTest(new ActionsGuiTest());
         guiTest.eventOptions(new ActionsGuiTestTable());
+        guiTest.setAlwaysOnTop(false);
+        guiTest.setResizable(false);
+        guiTest.setPreferredSize(new Dimension(850, 600));
         guiTest.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent evt) {
-                finalizeTest();
+                System.out.println("pause application ...");
+                if (inform("Teste será salvo com as respostas atuais.\nDeseja encerrar?",
+                        "Fechar Teste")) {
+                    finalizeTest();
+                } else {
+                    System.out.println("continue ...");
+                }
             }
         });
+        
+        // tabela de alternativas
+        guiTest.tbOptions.setFont(new java.awt.Font("Arial", Font.BOLD, 14));
 
         // resumo
         txtAreaSummary = new BackGroundTextArea();
@@ -124,6 +150,8 @@ public class Controller {
         txtAreaSummary.setEditable(false);
         txtAreaSummary.setColumns(20);
         txtAreaSummary.setFont(new java.awt.Font("Arial", 0, 18));
+        txtAreaSummary.setForeground(Color.white);
+        txtAreaSummary.setBackground(Color.black);
         txtAreaSummary.setRows(5);
         txtAreaSummary.setMargin(new java.awt.Insets(10, 10, 10, 10));
 
@@ -137,6 +165,7 @@ public class Controller {
         txtAreaHelp.setEditable(false);
         txtAreaHelp.setColumns(20);
         txtAreaHelp.setFont(new java.awt.Font("Arial", 0, 18));
+        txtAreaHelp.setForeground(Color.white);
         txtAreaHelp.setRows(5);
         txtAreaHelp.setMargin(new java.awt.Insets(10, 10, 10, 10));
 
@@ -175,13 +204,20 @@ public class Controller {
             pathUsers = LOCAL + Util.property(PROP, "PATHUSERS");
             pathQuestions = LOCAL + Util.property(PROP, "PATHQUESTIONS");
             pathAvailableTests = LOCAL + Util.property(PROP, "PATHTEST");
-            pathAnswers = LOCAL + Util.property(PROP, "PATHANSWER");
             pathImages = LOCAL + Util.property(PROP, "PATHIMAGES");
             pathImagesGui = LOCAL + Util.property(PROP, "PATHIMAGESGUI");
             pathThemes = LOCAL + Util.property(PROP, "PATHTHEMES");
+            // respostas salvas em diretório individual
+            pathAnswers = ANSWERS + Util.property(PROP, "PATHANSWER");
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        if (Util.createDirectory(pathAnswers)) {
+            System.out.println(pathAnswers + " ok ...");
+        } else {
+            System.out.println("new directory ... " + pathAnswers + " ...");
+        }        
     }
 
     private void loadData() {
@@ -243,6 +279,7 @@ public class Controller {
 
             Collections.sort(array);
             guiLogin.cboxUser.removeAllItems();
+            guiLogin.cboxUser.addItem("Visitante");
             array.forEach((s) -> {
                 guiLogin.cboxUser.addItem(s);
             });
@@ -300,8 +337,11 @@ public class Controller {
         timer.setInitialDelay(0);
         timer.start();              // iniciar objeto Timer
         guiLogin.setVisible(true);
+        guiLogin.cboxUser.setSelectedIndex(0);
         guiTest.setVisible(false);
         guiTest.lblUser.setText(currentUser + " : " + currentGroup);
+        guiResult.setVisible(false);
+        guiResult.txtAreaSummary.setText("");
     }
 
     private void closeLogin() {
@@ -360,8 +400,22 @@ public class Controller {
             }
 
             // atualizar o tempo para contagem regressiva
-            countTime = PLAYTIMER * (currentTest.size() - 1);
-            System.out.println("updated time ... " + countTime + "seconds");
+            if (!currentTest.get(0).getQuestion().equals(TEST)) {
+                System.out.println("hidden time counter ...");
+                guiTest.lblTimer.setVisible(false);
+                //guiTest.lblTimerText.setVisible(false);
+                guiTest.lblTimerText.setText("Leia com atenção!");
+                // tempo para tipo avaliação
+                countTime = 60 * 60 * 24;
+            } else {
+                guiTest.lblTimer.setVisible(true);
+                guiTest.lblTimerText.setVisible(true);
+                guiTest.lblTimerText.setText("Tempo Restante:");
+                // tempo para tipo treinamento, jogo
+                countTime = PLAYTIMER * (currentTest.size() - 1);
+            }
+            txtAreaSummary.setText(ALERT);
+            System.out.println("updated time ... " + countTime + " seconds");
 
             // preparar GUI Teste
             guiTest.tablePanel.setSelectedIndex(2); // abrir em help
@@ -371,7 +425,9 @@ public class Controller {
 
             // visitante, solicitar nome
             if (currentUser.equalsIgnoreCase(GUEST)) {
-                currentUser = JOptionPane.showInputDialog("Digite seu nome:");
+                do {
+                    currentUser = JOptionPane.showInputDialog("Digite seu nome:");
+                } while (currentUser == null);
                 if (currentUser.isEmpty()) {
                     currentUser = "Usuário Visitante";
                 }
@@ -417,7 +473,7 @@ public class Controller {
             ArrayList<String> options = new ArrayList<>();
             if (str.length > 4) {
                 if (currentTheme.equals(str[2]) || seeAll) {
-                    // Question(numero da questão, questao, resposta, pathImagem)               
+                    // Question(numero da questão, questao, resposta, pathImagem)          
                     q = new Question(number++, str[3], str[1], str[0]);
                     for (int j = 4; j < str.length; j++) {
                         options.add(str[j]);
@@ -549,44 +605,110 @@ public class Controller {
         }
     }
 
+    private String formatAnswers(int output) {
+        String delim;
+        switch (output) {
+            case 0: // txtAreaSummary
+            case 1: // export txt
+                delim = "\n";
+                break;
+            default: // export csv
+                delim = Util.DELIM;
+        }
+
+        String summary = ""; // cabeçalho padrão
+        summary += "Usuário: " + currentUser + "\n";
+        summary += "Grupo  : " + currentGroup + "\n";
+        summary += "Tema   : " + currentTheme + "\n\n";
+
+        switch (output) {
+            case 0: // txtAreaSummary
+            case 1: // export txt
+                break;
+            default: // export csv
+                summary += "Questão" + delim;
+                summary += "Resposta Esperada" + delim;
+                summary += "Resposta Usuário" + delim;
+                summary += "Lógica" + delim;
+                summary += "Situação" + delim + delim;
+                summary += "Questão" + delim;
+                summary += "Alternativas\n";
+        }
+
+        String str = "";
+        currentHits = 0;
+        currentNumberOfIssues = currentTest.size() - 1;
+        for (int i = 1; i < currentTest.size(); i++) {
+            switch (output) {
+                case 0: // txtAreaSummary
+                    str += currentTest.get(i).getNumber() + ") ";
+                    break;
+                case 1: // export txt
+                    str += delim + currentTest.get(i).getQuestion() + delim;
+                    str += "Opções:" + delim;
+                    for (int j = 0; j < currentTest.get(i).getOptions().size(); j++) {
+                        str += j + ") " + currentTest.get(i).getOptions().get(j) + "\n";
+                    }
+                    str += "Opção Esperada: " + currentTest.get(i).getAnswer();
+                    str += ") " + currentTest.get(i).getOptions().get(Integer.parseInt(currentTest.get(i).getAnswer())) + delim;
+                    if (currentTest.get(i).getCurrentAnswer() != -1) {
+                        str += "Opção Escolhida: " + currentTest.get(i).getCurrentAnswer();
+                        str += ") " + currentTest.get(i).getOptions().get(currentTest.get(i).getCurrentAnswer()) + delim;
+                    }
+                    str += "Situação: ";
+                    break;
+                default: // export csv
+                    str += currentTest.get(i).getNumber() + delim;
+                    str += currentTest.get(i).getAnswer() + delim;
+                    str += currentTest.get(i).getCurrentAnswer() + delim;
+                    str += "= (" + currentTest.get(i).getAnswer() + "="
+                            + currentTest.get(i).getCurrentAnswer() + ")+0"
+                            + delim;
+            }
+
+            if (currentTest.get(i).getCurrentAnswer() != -1) {
+                answered = true;
+                if (currentTest.get(i).getHit()) {
+                    str += " acertou" + delim;
+                    currentHits++;
+                } else {
+                    str += " resposta incorreta" + delim;
+                }
+            } else {
+                str += " sem resposta" + delim;
+            }
+
+            if (output == 2) {
+                str += delim + currentTest.get(i).getQuestion() + delim;
+                str = currentTest.get(i).getOptions().stream().map((s)
+                        -> s + delim).reduce(str, String::concat);
+                str += "\n";
+            }
+        }
+
+        if (answered) {
+            summary += str + "\nAcertos: " + String.valueOf(currentHits)
+                    + " de " + String.valueOf(currentNumberOfIssues);
+        } else {
+            summary = "Nenhuma resposta foi preenchida!";
+        }
+
+        return summary;
+    }
+
     private void updateSummary() {
         // atualizar resumo
         if (!currentTest.get(0).getQuestion().equals(TEST)) {
             txtAreaSummary.setText(ALERT);
         } else {
-            currentHits = 0;
-            currentNumberOfIssues = currentTest.size() - 1;
-            String str = "";
-            String summary = currentUser + " : " + currentGroup + "\n\n";
-
-            for (int i = 1; i < currentTest.size(); i++) {
-                str += currentTest.get(i).getNumber() + ") ";
-                if (currentTest.get(i).getCurrentAnswer() != -1) {
-                    answered = true;
-                    if (currentTest.get(i).getHit()) {
-                        str += " acertou\n";
-                        currentHits++;
-                    } else {
-                        str += " resposta incorreta\n";
-                    }
-                } else {
-                    str += " sem resposta\n";
-                }
-            }
-            if (answered) {
-                summary += "Acertos: " + String.valueOf(currentHits)
-                        + " de " + String.valueOf(currentNumberOfIssues)
-                        + "\n\n" + str;
-            } else {
-                summary = "Nenhuma resposta foi preenchida!";
-            }
-
+            String summary = formatAnswers(0);
             txtAreaSummary.setText(summary);
 
             if (currentHits == currentNumberOfIssues && started) {
                 //guiTest.tablePanel.setSelectedIndex(1);
                 started = false;
                 congratulations = true;
+                guiTest.tablePanel.setSelectedIndex(1); // abrir em resumo               
                 if (inform("Acertou todas as perguntas.\nDeseja salvar e encerrar?",
                         "PARABÉNS")) {
                     finalizeTest();
@@ -599,37 +721,22 @@ public class Controller {
         started = false; // parar contagem regressiva
 
         // salvar respostas no arquivo de saída
-        ArrayList answers = new ArrayList<>();
-        answers.add(currentUser + Util.DELIM + currentGroup
-                + Util.DELIM + currentTheme);
-        answers.add("Questão" + Util.DELIM + "Resposta Esperada"
-                + Util.DELIM + "Resposta Usuário" + Util.DELIM + "Situação");
-        for (int i = 1; i < currentTest.size(); i++) {
-            Question q = currentTest.get(i);
-            String output = q.getNumber() + Util.DELIM;
-            output += q.getAnswer() + Util.DELIM;
-            if (q.getCurrentAnswer() == -1) {
-                output += "nulo" + Util.DELIM;
-            } else {
-                output += q.getCurrentAnswer() + Util.DELIM;
-            }
-            if (q.getHit()) {
-                output += "acertou";
-            } else {
-                output += "errou";
-            }
-            answers.add(output);
-        }
+        String summaryTXT = formatAnswers(1);
+        String summaryCSV = formatAnswers(2);
 
-        try {
-            String path = pathAnswers + currentUser.replace(" ", "-")
-                    + "-" + currentTheme.replace(" ", "-");
-            path += "_" + Util.timeNow() +  ".csv";
-            Util.export(answers, path);
-            System.out.println("exported " + path + " ...");
+        String path = pathAnswers + currentUser.replace(" ", "-")
+                + "-" + currentTheme.replace(" ", "-");
+        path += "_" + Util.timeNow();
+        Util.export(summaryCSV, path + ".csv");
+        Util.export(summaryTXT, path + ".txt");
+
+        // exibir resumo (resultados)
+        if (!currentTest.get(0).getQuestion().equals(TEST)) {
+            guiResult.txtAreaSummary.setText(formatAnswers(1));
+            guiTest.setVisible(false);
+            guiResult.setVisible(true);
+        } else {
             login();
-        } catch (IOException ex) {
-            System.out.println("error while exporting file ...");
         }
     }
 
@@ -658,6 +765,18 @@ public class Controller {
             }
         }
     }
+    
+    class ActionsGuiResult implements ActionListener {
+        // controle dos botões do GUI Resumo
+
+        @Override
+        public void actionPerformed(ActionEvent ev) {
+            Object source = ev.getSource();
+            if (source == guiResult.btnClose) {
+                login();
+            }
+        }
+    }    
 
     class ActionsGuiTest implements ActionListener {
         // controle dos botões do GUI Teste
@@ -708,7 +827,12 @@ public class Controller {
         @Override
         public void mouseClicked(MouseEvent ev) {
             started = true && !congratulations && (countTime >= 0);
-            System.out.println("count status ..." + started);
+            System.out.print("count status ... ");
+            if (!guiTest.lblTimer.isVisible()) {
+                System.out.println("irrelevant ...");
+            } else {
+                System.out.println(started + " ...");
+            }
             if (started) {
                 updateSavedResponses(guiTest.tbOptions.getSelectedRow());
             }
@@ -741,6 +865,11 @@ public class Controller {
         }
 
         public void setBackgroundImage(Image image) {
+
+            image = image.getScaledInstance(
+                    guiTest.tablePanel.getWidth() - 10,
+                    guiTest.tablePanel.getHeight() - 10,
+                    Image.SCALE_SMOOTH);
             this.backgroundImage = image;
             this.repaint();
             this.setOpaque(false);
