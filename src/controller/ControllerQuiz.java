@@ -40,11 +40,11 @@ import view.GuiResult;
 import view.GuiTest;
 import view.Login;
 
-public class Controller {
+public class ControllerQuiz {
 
-    private final static String LOCAL = "";
     private final static String ANSWERS = "";
-    protected final static String PROP = LOCAL + "resources/pathTests.properties";
+    private final static String LOCAL = Util.userDir();
+    protected final static String PROP = LOCAL + "/resources/pathTests.properties";    
 
     private GuiTest guiTest = null;
     private Login guiLogin = null;
@@ -102,7 +102,7 @@ public class Controller {
             + "\n\nBoa Sorte!";
     private static final int PLAYTIMER = 50;    // segundos por questão
 
-    public Controller() {
+    public ControllerQuiz() {
         // dados
         groups = new HashMap<>();
         users = new HashMap<>();
@@ -210,7 +210,7 @@ public class Controller {
             // respostas salvas em diretório individual
             pathAnswers = ANSWERS + Util.property(PROP, "PATHANSWER");
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ControllerQuiz.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         if (Util.createDirectory(pathAnswers)) {

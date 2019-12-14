@@ -5,9 +5,10 @@ import java.util.ArrayList;
 public class Question {
 
     private final int number;
-    private final String question;
-    private final String correctAnswer;
-    private final String pathImage;
+    private String question;
+    private String theme;
+    private String correctAnswer;
+    private String pathImage;
     private int currentAnswer;
     private boolean hit;
     private ArrayList<String> options;
@@ -18,6 +19,7 @@ public class Question {
         this.question = question;
         this.correctAnswer = answer;
         this.pathImage = pathImage;
+        theme = "";
         options = new ArrayList<>();
         hit = false;
         currentAnswer = -1;
@@ -29,6 +31,10 @@ public class Question {
 
     public String getQuestion() {
         return question;
+    }
+    
+    public String getTheme() {
+        return theme;
     }
 
     public String getAnswer() {
@@ -50,6 +56,22 @@ public class Question {
     public int getCurrentAnswer() {
         return currentAnswer;
     }
+    
+    public void setQuestion(String question) {
+        this.question = question;
+    }
+    
+    public void setCorrectAnswer(String correctAnswer) {
+        this.correctAnswer = correctAnswer;
+    }
+    
+    public void setPathImage(String pathImage) {
+        this.pathImage = pathImage;
+    }
+    
+    public void setTheme(String newTheme) {
+        theme = newTheme;
+    }
 
     public void setHit(boolean state) {
         hit = state;
@@ -65,7 +87,8 @@ public class Question {
 
     @Override
     public String toString() {
-        String str = "Questão: " + number + "\nPergunta: " + question
+        String str = "Tema: " + theme 
+                + "\nQuestão: " + number + "\nPergunta: " + question
                 + "\nResposta: " + correctAnswer + "\nImagem: " + pathImage
                 + "\nAlternativas:\n";
         str = options.stream().map((s) -> s + "\n").reduce(str, String::concat);

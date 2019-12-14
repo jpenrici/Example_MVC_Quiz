@@ -20,11 +20,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Util {
 
     protected static final String DELIM = ";";
-    private static final boolean ISWIN = isWin();
+    //private static final boolean ISWIN = isWin();
 
     protected static ArrayList<String> loadFile(String path) {
         ArrayList<String> array = new ArrayList<>();
@@ -41,7 +43,7 @@ public class Util {
             }
             System.out.println(path + " ok ...");
         } catch (IOException e) {
-            System.out.println(path + " error ...");
+            System.err.println(path + " error ...");
             return null;
         }
         // Converter String em ArrayList
@@ -62,7 +64,7 @@ public class Util {
         }
         return array;
     }
-    
+
     protected static void export(String strOut, String path) {
         try {
             FileOutputStream output = new FileOutputStream(path);
@@ -71,9 +73,9 @@ public class Util {
             }
             System.out.println("exported " + path + " ...");
         } catch (IOException e) {
-            System.out.println("export " + path + " error ...");
+            System.err.println("export " + path + " error ...");
         }
-    }    
+    }
 
     protected static void export(ArrayList<String> array, String path) {
         String strOut = "";
@@ -118,7 +120,7 @@ public class Util {
             props.load(fis);
             fis.close();
         } catch (IOException ex) {
-            System.out.println(path + " ... error!");
+            System.err.println(path + " ... error!");
         }
         return (String) props.getProperty(key);
     }
@@ -147,5 +149,14 @@ public class Util {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HHmmss");
         Date date = new Date();
         return dateFormat.format(date);
+    }
+
+    protected static String userDir() {
+        return System.getProperty("user.dir");
+    }
+
+    protected static String filename(String path) {
+        File file = new File(path);
+        return file.getName();
     }
 }
