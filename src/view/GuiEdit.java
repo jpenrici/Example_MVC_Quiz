@@ -40,7 +40,7 @@ public class GuiEdit extends javax.swing.JFrame {
         btnClearQuestion = new javax.swing.JToggleButton();
         btnSaveQuestion = new javax.swing.JToggleButton();
         jLabel1 = new javax.swing.JLabel();
-        cbxCorrectAnswer = new javax.swing.JComboBox<>();
+        cboxCorrectAnswer = new javax.swing.JComboBox<>();
         txtData = new javax.swing.JTextField();
         btnLoad = new javax.swing.JButton();
         lblData = new javax.swing.JLabel();
@@ -92,7 +92,7 @@ public class GuiEdit extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        tbOptions.setToolTipText("Clique em um item para selecionar.");
+        tbOptions.setToolTipText("Clique em um item para editar.");
         tbOptions.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         tbOptions.setRowHeight(20);
         tbOptions.getTableHeader().setReorderingAllowed(false);
@@ -124,8 +124,8 @@ public class GuiEdit extends javax.swing.JFrame {
         btnNext.setText("Avançar >>");
         btnNext.setToolTipText("Ir para a próxima questão.");
 
-        btnFinish.setText("Finalizar Edição");
-        btnFinish.setToolTipText("Sair do teste e salvar respostas.");
+        btnFinish.setText("Salvar Edição");
+        btnFinish.setToolTipText("Salvar Edição em arquivo externo.");
 
         btnLast.setText("Última");
         btnLast.setToolTipText("Ir para a última questão.");
@@ -165,6 +165,7 @@ public class GuiEdit extends javax.swing.JFrame {
 
         btnClearTheme.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnClearTheme.setText("Limpar Tema");
+        btnClearTheme.setToolTipText("");
 
         btnClearOptions.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnClearOptions.setText("Limpar Alternativas");
@@ -173,13 +174,16 @@ public class GuiEdit extends javax.swing.JFrame {
         btnClearQuestion.setText("Limpar Questão");
 
         btnSaveQuestion.setText("Confirmar Alterações");
+        btnSaveQuestion.setToolTipText("");
 
         jLabel1.setText("Alternativa Correta:");
 
-        cbxCorrectAnswer.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboxCorrectAnswer.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Vazio" }));
+        cboxCorrectAnswer.setToolTipText("Indique a resposta da questão.");
 
         txtData.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         txtData.setText("Tema");
+        txtData.setToolTipText("Tema da atual questão.");
 
         javax.swing.GroupLayout panelTestLayout = new javax.swing.GroupLayout(panelTest);
         panelTest.setLayout(panelTestLayout);
@@ -202,7 +206,7 @@ public class GuiEdit extends javax.swing.JFrame {
                             .addGroup(panelTestLayout.createSequentialGroup()
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbxCorrectAnswer, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(cboxCorrectAnswer, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(txtData))
                         .addGap(0, 0, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTestLayout.createSequentialGroup()
@@ -235,7 +239,7 @@ public class GuiEdit extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(panelTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cbxCorrectAnswer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(cboxCorrectAnswer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -247,15 +251,16 @@ public class GuiEdit extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        panelTestLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {cbxCorrectAnswer, jLabel1});
+        panelTestLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {cboxCorrectAnswer, jLabel1});
 
         tablePanel.addTab("MODO EDIÇÂO", panelTest);
 
         btnLoad.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnLoad.setText("Carregar Outro Arquivo");
-        btnLoad.setToolTipText("Fecha o teste atual sem salvar resultados.");
+        btnLoad.setToolTipText("Abrir outro arquivo para edição.");
 
         lblData.setText("Arquivo Aberto...");
+        lblData.setToolTipText("");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -286,8 +291,6 @@ public class GuiEdit extends javax.swing.JFrame {
                 .addComponent(tablePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 571, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnLoad, lblData});
 
         pack();
         setLocationRelativeTo(null);
@@ -332,7 +335,7 @@ public class GuiEdit extends javax.swing.JFrame {
     public javax.swing.JButton btnNext;
     public javax.swing.JButton btnPrevious;
     public javax.swing.JToggleButton btnSaveQuestion;
-    public javax.swing.JComboBox<String> cbxCorrectAnswer;
+    public javax.swing.JComboBox<String> cboxCorrectAnswer;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
