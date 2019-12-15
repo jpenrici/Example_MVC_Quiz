@@ -22,8 +22,6 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -42,9 +40,8 @@ import view.Login;
 
 public class ControllerQuiz {
 
-    private final static String ANSWERS = "";
     private final static String LOCAL = Util.userDir();
-    protected final static String PROP = LOCAL + "/resources/pathTests.properties";    
+    private final static String PROP = LOCAL + "/resources/resources.properties";
 
     private GuiTest guiTest = null;
     private Login guiLogin = null;
@@ -103,6 +100,10 @@ public class ControllerQuiz {
     private static final int PLAYTIMER = 50;    // segundos por questão
 
     public ControllerQuiz() {
+
+        // checar recursos
+        checkBaseFiles();
+
         // dados
         groups = new HashMap<>();
         users = new HashMap<>();
@@ -118,7 +119,7 @@ public class ControllerQuiz {
         guiResult = new GuiResult();
         guiResult.eventResult(new ActionsGuiResult());
         guiResult.setAlwaysOnTop(false);
-        guiResult.setPreferredSize(new Dimension(800, 500));        
+        guiResult.setPreferredSize(new Dimension(800, 500));
         guiResult.txtAreaSummary.setText("");
 
         // GUI Teste
@@ -140,7 +141,7 @@ public class ControllerQuiz {
                 }
             }
         });
-        
+
         // tabela de alternativas
         guiTest.tbOptions.setFont(new java.awt.Font("Arial", Font.BOLD, 14));
 
@@ -192,13 +193,13 @@ public class ControllerQuiz {
         });
 
         // iniciar
-        checkBaseFiles();
         loadData();
         login();
     }
 
     private void checkBaseFiles() {
         System.out.println("open Quiz ...");
+
         try {
             pathGroups = LOCAL + Util.property(PROP, "PATHGROUPS");
             pathUsers = LOCAL + Util.property(PROP, "PATHUSERS");
@@ -208,16 +209,16 @@ public class ControllerQuiz {
             pathImagesGui = LOCAL + Util.property(PROP, "PATHIMAGESGUI");
             pathThemes = LOCAL + Util.property(PROP, "PATHTHEMES");
             // respostas salvas em diretório individual
-            pathAnswers = ANSWERS + Util.property(PROP, "PATHANSWER");
+            pathAnswers = LOCAL + Util.property(PROP, "PATHANSWER");
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(ControllerQuiz.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println("error loading properties ...");
         }
 
         if (Util.createDirectory(pathAnswers)) {
             System.out.println(pathAnswers + " ok ...");
         } else {
             System.out.println("new directory ... " + pathAnswers + " ...");
-        }        
+        }
     }
 
     private void loadData() {
@@ -269,7 +270,7 @@ public class ControllerQuiz {
         }
         users = Util.loadMap(file);
         System.out.println(file + " ...");
-        if (Util.fileExists(file)) {
+        if (Util.pathExists(file)) {
             guiLogin.cboxUser.setEnabled(true);
             guiLogin.lblUser.setEnabled(true);
             ArrayList<String> array = new ArrayList<>();
@@ -354,7 +355,7 @@ public class ControllerQuiz {
 
         // checar testes disponíveis para o grupo escolhido
         String file = "";
-        if (Util.fileExists(pathAvailableTests)) {
+        if (Util.pathExists(pathAvailableTests)) {
             ArrayList<String> array = Util.loadFile(pathAvailableTests);
             for (String s : array) {
                 String[] str = s.split(Util.DELIM);
@@ -367,7 +368,7 @@ public class ControllerQuiz {
             }
         }
         System.out.println("check questions ... " + file + "...");
-        if (Util.fileExists(pathQuestions + file)) {
+        if (Util.pathExists(pathQuestions + file)) {
             if (guiLogin.cboxTheme.isEnabled()) {
                 currentTheme = String.valueOf(guiLogin.cboxTheme.getSelectedItem());
             }
@@ -377,12 +378,12 @@ public class ControllerQuiz {
         } else {
             if (inform("Não há teste para:\n" + currentGroup
                     + "\nDeseja encerrar?", "Atenção!")) {
-                exitLogin();
+                exitQuiz();
             }
         }
     }
 
-    private void exitLogin() {
+    private void exitQuiz() {
         System.out.println("close application ...");
         System.exit(0);
     }
@@ -441,7 +442,7 @@ public class ControllerQuiz {
             String str = "Não há teste para:\n" + currentGroup
                     + "\nTema: " + currentTheme;
             if (inform(str + "\nDeseja encerrar?", "Atenção!")) {
-                exitLogin();
+                exitQuiz();
             }
         }
     }
@@ -757,7 +758,7 @@ public class ControllerQuiz {
                 closeLogin();
             }
             if (source == guiLogin.btnQuit) {
-                exitLogin();
+                exitQuiz();
             }
             if (source == guiLogin.cboxGroup) {
                 updateUsers();
@@ -765,7 +766,7 @@ public class ControllerQuiz {
             }
         }
     }
-    
+
     class ActionsGuiResult implements ActionListener {
         // controle dos botões do GUI Resumo
 
@@ -776,7 +777,7 @@ public class ControllerQuiz {
                 login();
             }
         }
-    }    
+    }
 
     class ActionsGuiTest implements ActionListener {
         // controle dos botões do GUI Teste

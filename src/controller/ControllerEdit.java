@@ -13,8 +13,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -30,7 +28,7 @@ import view.GuiEdit;
 public class ControllerEdit {
 
     private final static String LOCAL = Util.userDir();
-    protected final static String PROP = LOCAL + "/resources/pathTests.properties";
+    private final static String PROP = LOCAL + "/resources/resources.properties";
 
     private ArrayList<Question> currentQuestions;
     private String pathQuestions;
@@ -55,6 +53,9 @@ public class ControllerEdit {
 
     private void initialize() {
 
+        // checar recursos
+        checkBaseFiles();
+
         // GUI Edit
         guiEdit = new GuiEdit();
         guiEdit.eventTest(new ActionsGuiTest());
@@ -78,7 +79,6 @@ public class ControllerEdit {
         guiEdit.tbOptions.setFont(new java.awt.Font("Arial", Font.BOLD, 14));
 
         // iniciar
-        checkBaseFiles();
         start();
     }
 
@@ -88,7 +88,7 @@ public class ControllerEdit {
             pathSaveQuestions = LOCAL + Util.property(PROP, "PATHSAVEQUESTIONS");
             pathImages = LOCAL + Util.property(PROP, "PATHIMAGES");
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(ControllerEdit.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println("error loading properties ...");
         }
     }
 
@@ -222,7 +222,7 @@ public class ControllerEdit {
         currentQuestions.get(currentQuestion).setQuestion(guiEdit.txtAreaQuestion.getText());
         currentQuestions.get(currentQuestion).setTheme(guiEdit.txtData.getText());
         currentQuestions.get(currentQuestion).setCorrectAnswer(
-                String.valueOf(guiEdit.cboxCorrectAnswer.getSelectedIndex() - 1));        
+                String.valueOf(guiEdit.cboxCorrectAnswer.getSelectedIndex() - 1));
 
         ArrayList<String> options = new ArrayList<>();
         for (int i = 0; i < guiEdit.tbOptions.getRowCount(); i++) {
@@ -366,10 +366,10 @@ public class ControllerEdit {
             if (source == guiEdit.btnClearQuestion) {
                 guiEdit.txtAreaQuestion.setText("");
             }
-            
+
             if (source == guiEdit.btnClearTheme) {
                 guiEdit.txtData.setText("");
-            }            
+            }
         }
     }
 }

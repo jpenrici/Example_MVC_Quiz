@@ -20,8 +20,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Util {
 
@@ -97,7 +95,7 @@ public class Util {
         return map;
     }
 
-    protected static boolean fileExists(String path) {
+    public static boolean pathExists(String path) {
         File file = new File(path);
         return file.exists();
     }
@@ -112,7 +110,7 @@ public class Util {
     }
 
     @SuppressWarnings("ConvertToTryWithResources")
-    protected static String property(String path, String key)
+    public static String property(String path, String key)
             throws FileNotFoundException {
         Properties props = new Properties();
         try {
@@ -121,6 +119,7 @@ public class Util {
             fis.close();
         } catch (IOException ex) {
             System.err.println(path + " ... error!");
+            return "error";
         }
         return (String) props.getProperty(key);
     }
@@ -151,7 +150,7 @@ public class Util {
         return dateFormat.format(date);
     }
 
-    protected static String userDir() {
+    public static String userDir() {
         return System.getProperty("user.dir");
     }
 

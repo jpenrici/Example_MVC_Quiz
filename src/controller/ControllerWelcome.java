@@ -7,6 +7,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -14,13 +15,17 @@ import javax.swing.JButton;
 import view.Welcome;
 
 public class ControllerWelcome {
-    
-    private final static String LOCAL = Util.userDir();
-    protected final static String PROP = LOCAL + "/resources/pathTests.properties";      
 
+    private final static String LOCAL = Util.userDir();
+    private final static String PROP = LOCAL + "/resources/resources.properties";
+
+    private String pathImagesGui;
     private Welcome guiWelcome = null;
 
     public ControllerWelcome() {
+
+        // checar recursos
+        checkBaseFiles();
 
         // GUI Welcome
         guiWelcome = new Welcome();
@@ -44,6 +49,14 @@ public class ControllerWelcome {
 
         System.out.println("open welcome ...");
         guiWelcome.setVisible(true);
+    }
+
+    private void checkBaseFiles() {
+        try {
+            pathImagesGui = LOCAL + Util.property(PROP, "PATHIMAGESBTN");
+        } catch (FileNotFoundException ex) {
+            System.err.println("error loading properties ...");
+        }
     }
 
     private void close() {
@@ -79,10 +92,8 @@ public class ControllerWelcome {
     }
 
     private void updateImageButtons(JButton button, String image) {
-        
-        String pathImagesGui;
+
         try {
-            pathImagesGui = LOCAL + Util.property(PROP, "PATHIMAGESBTN");
             BufferedImage imgOriginal = ImageIO.read(new File(pathImagesGui + image));
             Image img = imgOriginal.getScaledInstance(
                     button.getWidth(),
