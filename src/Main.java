@@ -1,19 +1,26 @@
 
 import controller.ControllerEdit;
 import controller.ControllerQuiz;
+import controller.ControllerWelcome;
 
 public class Main {
 
     public static void main(String[] args) {
 
+        Object display;
+
         if (args.length != 1) {
-            // Modo Quiz
-            ControllerQuiz newController = new ControllerQuiz();
+            display = new ControllerWelcome();
         } else {
-            if (args[0].equalsIgnoreCase("--edit")) {
-                // Modo Editar Questões
-                System.out.println("open application in edit mode ...");
-                ControllerEdit newController = new ControllerEdit();
+            switch (args[0]) {
+                case "--edit":
+                    display = new ControllerEdit();
+                    break;
+                case "--quiz":
+                    display = new ControllerQuiz();
+                    break;
+                default:
+                    display = new ControllerWelcome();
             }
         }
     }
