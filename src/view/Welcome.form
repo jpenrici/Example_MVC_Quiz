@@ -82,7 +82,7 @@
       <SubComponents>
         <Component class="javax.swing.JButton" name="btnWelcome1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="NOVO"/>
+            <Property name="text" type="java.lang.String" value="btn 1"/>
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
@@ -91,7 +91,7 @@
         <Component class="javax.swing.JLabel" name="lblWelcome1">
           <Properties>
             <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" value="Novo"/>
+            <Property name="text" type="java.lang.String" value="lbl 1"/>
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
@@ -131,7 +131,7 @@
       <SubComponents>
         <Component class="javax.swing.JButton" name="btnWelcome2">
           <Properties>
-            <Property name="text" type="java.lang.String" value="NOVO"/>
+            <Property name="text" type="java.lang.String" value="btn 2"/>
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
@@ -140,7 +140,7 @@
         <Component class="javax.swing.JLabel" name="lblWelcome2">
           <Properties>
             <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" value="Novo"/>
+            <Property name="text" type="java.lang.String" value="lbl 2"/>
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
@@ -180,7 +180,7 @@
       <SubComponents>
         <Component class="javax.swing.JButton" name="btnWelcome3">
           <Properties>
-            <Property name="text" type="java.lang.String" value="NOVO"/>
+            <Property name="text" type="java.lang.String" value="btn 3"/>
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
@@ -189,7 +189,7 @@
         <Component class="javax.swing.JLabel" name="lblWelcome3">
           <Properties>
             <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" value="Novo"/>
+            <Property name="text" type="java.lang.String" value="lbl 3"/>
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>

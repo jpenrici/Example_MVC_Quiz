@@ -1,5 +1,21 @@
 # Example_MVC_Quiz
+
 Example of using the MVC model in Java: Application QUIZ.
+
+# Requirements
+
+	JDK 1.8
+
+	Tested on Debian 9, Openbox and NetBeans IDE 8.2
+
+# Run
+	
+	Welcome: java -jar "JQUIZ.jar"
+
+	Mode: java -jar "JQUIZ.jar" [Option]
+	Quiz           : --quiz
+	Test Edit      : --edit
+	Create new test: --new
 
 # Display
 ![Login](https://github.com/jpenrici/Example_MVC_Quiz/blob/master/display/display_login.png)

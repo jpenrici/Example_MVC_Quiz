@@ -1,22 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package view;
 
-import controller.ControllerWelcome;
 import java.awt.event.ActionListener;
 
-/**
- *
- * @author jpenrici
- */
 public class Welcome extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Welcome
-     */
     public Welcome() {
         initComponents();
     }
@@ -47,10 +35,10 @@ public class Welcome extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("MENU");
 
-        btnWelcome1.setText("NOVO");
+        btnWelcome1.setText("btn 1");
 
         lblWelcome1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblWelcome1.setText("Novo");
+        lblWelcome1.setText("lbl 1");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -77,10 +65,10 @@ public class Welcome extends javax.swing.JFrame {
                 .addComponent(lblWelcome1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        btnWelcome2.setText("NOVO");
+        btnWelcome2.setText("btn 2");
 
         lblWelcome2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblWelcome2.setText("Novo");
+        lblWelcome2.setText("lbl 2");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -104,10 +92,10 @@ public class Welcome extends javax.swing.JFrame {
                 .addComponent(lblWelcome2, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        btnWelcome3.setText("NOVO");
+        btnWelcome3.setText("btn 3");
 
         lblWelcome3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblWelcome3.setText("Novo");
+        lblWelcome3.setText("lbl 3");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);

@@ -14,8 +14,11 @@ public class Main {
         } else {
             switch (args[0]) {
                 case "--edit":
-                    display = new ControllerEdit();
+                    display = new ControllerEdit(false);
                     break;
+                case "--new":
+                    display = new ControllerEdit(true);
+                    break;                    
                 case "--quiz":
                     display = new ControllerQuiz();
                     break;
