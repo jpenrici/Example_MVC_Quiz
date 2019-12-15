@@ -18,6 +18,8 @@ Example of using the MVC model in Java: Application QUIZ.
 	Create new test: --new
 
 # Display
+![Login](https://github.com/jpenrici/Example_MVC_Quiz/blob/master/display/display_welcome.png)
+
 ![Login](https://github.com/jpenrici/Example_MVC_Quiz/blob/master/display/display_login.png)
 
 ![Test](https://github.com/jpenrici/Example_MVC_Quiz/blob/master/display/display_quiz_1.png)
