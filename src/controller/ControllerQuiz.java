@@ -198,7 +198,7 @@ public class ControllerQuiz {
     }
 
     private void checkBaseFiles() {
-        System.out.println("open Quiz ...");
+        System.out.println("open application in quiz mode ...");
 
         try {
             pathGroups = LOCAL + Util.property(PROP, "PATHGROUPS");

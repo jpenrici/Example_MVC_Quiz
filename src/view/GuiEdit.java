@@ -42,6 +42,7 @@ public class GuiEdit extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         cboxCorrectAnswer = new javax.swing.JComboBox<>();
         txtData = new javax.swing.JTextField();
+        btnImage = new javax.swing.JToggleButton();
         btnLoad = new javax.swing.JButton();
         lblData = new javax.swing.JLabel();
 
@@ -185,30 +186,33 @@ public class GuiEdit extends javax.swing.JFrame {
         txtData.setText("Tema");
         txtData.setToolTipText("Tema da atual questão.");
 
+        btnImage.setText("Carregar Imagem");
+
         javax.swing.GroupLayout panelTestLayout = new javax.swing.GroupLayout(panelTest);
         panelTest.setLayout(panelTestLayout);
         panelTestLayout.setHorizontalGroup(
             panelTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTestLayout.createSequentialGroup()
-                .addComponent(lblImage, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)
+                .addGap(12, 12, 12)
+                .addGroup(panelTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(lblImage, javax.swing.GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE)
+                    .addComponent(btnImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelTestLayout.createSequentialGroup()
-                        .addComponent(btnClearTheme, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnClearTheme, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnClearQuestion)
                         .addGap(4, 4, 4)
                         .addComponent(btnClearOptions))
-                    .addGroup(panelTestLayout.createSequentialGroup()
-                        .addGroup(panelTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane2)
-                            .addGroup(panelTestLayout.createSequentialGroup()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cboxCorrectAnswer, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(txtData))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(panelTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jScrollPane2)
+                        .addGroup(panelTestLayout.createSequentialGroup()
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(cboxCorrectAnswer, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtData))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTestLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -222,12 +226,9 @@ public class GuiEdit extends javax.swing.JFrame {
         panelTestLayout.setVerticalGroup(
             panelTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelTestLayout.createSequentialGroup()
-                .addGroup(panelTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addContainerGap()
+                .addGroup(panelTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelTestLayout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelTestLayout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(panelTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnClearTheme, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnClearQuestion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -235,12 +236,19 @@ public class GuiEdit extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblImage, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(panelTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelTestLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(panelTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cboxCorrectAnswer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cboxCorrectAnswer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTestLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnImage)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -251,7 +259,7 @@ public class GuiEdit extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        panelTestLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {cboxCorrectAnswer, jLabel1});
+        panelTestLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnImage, cboxCorrectAnswer, jLabel1});
 
         tablePanel.addTab("MODO EDIÇÂO", panelTest);
 
@@ -259,7 +267,7 @@ public class GuiEdit extends javax.swing.JFrame {
         btnLoad.setText("Carregar Outro Arquivo");
         btnLoad.setToolTipText("Abrir outro arquivo para edição.");
 
-        lblData.setText("Arquivo Aberto...");
+        lblData.setText("Aguardando ...");
         lblData.setToolTipText("");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -330,6 +338,7 @@ public class GuiEdit extends javax.swing.JFrame {
     public javax.swing.JToggleButton btnClearTheme;
     public javax.swing.JButton btnFinish;
     public javax.swing.JButton btnFirst;
+    public javax.swing.JToggleButton btnImage;
     public javax.swing.JButton btnLast;
     public javax.swing.JButton btnLoad;
     public javax.swing.JButton btnNext;
@@ -363,5 +372,6 @@ public class GuiEdit extends javax.swing.JFrame {
         this.btnClearQuestion.addActionListener(ev);
         this.btnClearOptions.addActionListener(ev);
         this.btnSaveQuestion.addActionListener(ev);
+        this.btnImage.addActionListener(ev);
     }
 }

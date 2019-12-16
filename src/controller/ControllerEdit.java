@@ -37,6 +37,7 @@ public class ControllerEdit {
     private String currentTheme;
     private String currentPath;
     private int currentQuestion;
+    private int numQuestions;
     private final boolean newTest;
 
     private GuiEdit guiEdit = null;
@@ -75,6 +76,8 @@ public class ControllerEdit {
             }
         });
 
+        guiEdit.btnLoad.setVisible(!newTest);
+
         // tabela de alternativas
         guiEdit.tbOptions.setFont(new java.awt.Font("Arial", Font.BOLD, 14));
 
@@ -83,6 +86,7 @@ public class ControllerEdit {
     }
 
     private void checkBaseFiles() {
+        System.out.println("open application in edit mode ...");
         try {
             pathQuestions = LOCAL + Util.property(PROP, "PATHQUESTIONS");
             pathSaveQuestions = LOCAL + Util.property(PROP, "PATHSAVEQUESTIONS");
@@ -124,16 +128,13 @@ public class ControllerEdit {
     }
 
     private void start() {
+        numQuestions = 10;
         currentQuestion = 1;
-        currentTheme = "Tema a definir ...";
-        int numQuestions = 1;
+
+        guiEdit.setVisible(true);
 
         if (newTest) {
-            String temp = JOptionPane.showInputDialog("Digite o número de Questões:");
-            if (temp.isEmpty()) {
-                numQuestions = Integer.parseInt(temp);
-                currentPath = "NOVO";
-            }
+            newQuestions();
         } else {
             // Carregar arquivo existente
             currentPath = read(pathQuestions, true);
@@ -141,18 +142,43 @@ public class ControllerEdit {
                 exitEdit();
                 // ADEQUAR CASO VAZIO!!!
             }
-
             if (loadQuestions(currentPath)) { // carregar questões
-                updateQuestion(); // atualizar questão na GUI
                 currentTheme = currentQuestions.get(currentQuestion).getTheme();
             }
         }
 
         // preparar GUI 
-        guiEdit.setVisible(true);
         guiEdit.txtData.setText(currentTheme);
         guiEdit.lblData.setText(Util.filename(currentPath));
         guiEdit.lblData.setToolTipText(currentPath);
+
+        updateQuestion(); // atualizar questão na GUI        
+    }
+
+    private void newQuestions() {
+        String num;
+        int minOptions = 5;
+
+        do {
+            num = JOptionPane.showInputDialog("Digite o número de Questões:");
+        } while (num == null);
+
+        currentPath = "NOVO ARQUIVO";
+        currentTheme = "Tema";
+        currentQuestions = new ArrayList<>();
+        if (!num.equals("")) {
+            numQuestions = Integer.parseInt(num);
+        }
+        for (int i = 0; i <= numQuestions; i++) {
+            Question q = new Question(i, "Nova Questão", "0", "");
+            ArrayList<String> array = new ArrayList<>();
+            for (int j = 0; j < minOptions; j++) {
+                array.add("Clique em limpar! E digite as alternativas");
+            }
+            q.setTheme(currentTheme);
+            q.setOptions(array);
+            currentQuestions.add(q);
+        }
     }
 
     private boolean loadQuestions(String file) {
@@ -353,6 +379,21 @@ public class ControllerEdit {
 
             if (source == guiEdit.btnLoad) {
                 start();
+            }
+
+            if (source == guiEdit.btnImage) {
+                System.out.println("change image ...");
+                String imagePath = read(pathImages, true);
+                if (!imagePath.equals("")) {
+                    String[] str = imagePath.split(pathImages);
+                    if (str.length > 1) {
+                        imagePath = str[str.length - 1];
+                    }
+                    currentQuestions.get(currentQuestion).setPathImage(imagePath);
+                    updateImageQuestion();
+                } else {
+                    inform("Erro ao carregar imagem!", "Atenção");
+                }
             }
 
             if (source == guiEdit.btnSaveQuestion) {
