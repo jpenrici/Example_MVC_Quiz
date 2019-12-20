@@ -1,17 +1,11 @@
 package controller;
 
 import java.awt.Frame;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import view.Welcome;
 
@@ -60,7 +54,7 @@ public class ControllerWelcome {
         }
     }
     
-    private void close() {
+    private void minimizeGui() {
             System.out.println("minimize welcome ...");
             guiWelcome.setState(Frame.ICONIFIED);
     }
@@ -78,34 +72,21 @@ public class ControllerWelcome {
         public void actionPerformed(ActionEvent ev) {
             Object source = ev.getSource();
             if (source == guiWelcome.btnWelcome1) { // Editar Teste existente
-                close();
+                minimizeGui();
                 ControllerEdit display = new ControllerEdit(false, true);
             }
             if (source == guiWelcome.btnWelcome2) { // Criar Novo Teste
-                close();
+                minimizeGui();
                 ControllerEdit display = new ControllerEdit(true, true);
             }
             if (source == guiWelcome.btnWelcome3) { // Abrir Quiz
-                close();
+                minimizeGui();
                 ControllerQuiz display = new ControllerQuiz();
             }
         }
     }
 
     private void updateImageButtons(JButton button, String image) {
-
-        try {
-            BufferedImage imgOriginal = ImageIO.read(new File(pathImagesGui + image));
-            Image img = imgOriginal.getScaledInstance(
-                    button.getWidth(),
-                    button.getHeight(),
-                    Image.SCALE_SMOOTH);
-            ImageIcon imgBtn = new ImageIcon(img);
-            button.setText("");
-            button.setIcon(imgBtn);
-        } catch (IOException ex) {
-            button.setText("#");
-            button.setIcon(null);
-        }
+        UtilGui.updateImage(button, pathImagesGui + image, "#");
     }
 }

@@ -4,8 +4,8 @@ import java.io.FileNotFoundException;
 
 public class Controller {
 
-    public final static String LOCAL = Util.userDir();
-    public final static String PROP = LOCAL + "/resources/resources.properties";
+    protected final static String LOCAL = Util.userDir();
+    protected final static String PROP = LOCAL + "/resources/resources.properties";
 
     public Controller(String[] args) {
 

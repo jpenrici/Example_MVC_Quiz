@@ -95,7 +95,7 @@ public class Util {
         return map;
     }
 
-    public static boolean pathExists(String path) {
+    protected static boolean pathExists(String path) {
         File file = new File(path);
         return file.exists();
     }
@@ -110,7 +110,7 @@ public class Util {
     }
 
     @SuppressWarnings("ConvertToTryWithResources")
-    public static String property(String path, String key)
+    protected static String property(String path, String key)
             throws FileNotFoundException {
         Properties props = new Properties();
         try {
@@ -150,7 +150,7 @@ public class Util {
         return dateFormat.format(date);
     }
 
-    public static String userDir() {
+    protected static String userDir() {
         return System.getProperty("user.dir");
     }
 

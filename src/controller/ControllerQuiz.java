@@ -13,7 +13,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -23,7 +22,6 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -600,21 +598,7 @@ public class ControllerQuiz {
 
     private void updateImageQuestion() {
         String imagePath = pathImages + currentTest.get(currentQuestion).getPathImage();
-        //System.out.println(imagePath);
-        try {
-            BufferedImage imgOriginal = ImageIO.read(new File(imagePath));
-            Image img = imgOriginal.getScaledInstance(
-                    guiTest.lblImage.getWidth(),
-                    guiTest.lblImage.getHeight(),
-                    Image.SCALE_SMOOTH);
-            ImageIcon imgLabel = new ImageIcon(img);
-            guiTest.lblImage.setText("");
-            guiTest.lblImage.setIcon(imgLabel);
-        } catch (IOException ex) {
-            String str = "Questão sem imagem disponível!";
-            guiTest.lblImage.setText(str);
-            guiTest.lblImage.setIcon(null);
-        }
+        UtilGui.updateImage(guiTest.lblImage, imagePath, "imagem indisponível!");
     }
 
     private String formatAnswers(int output) {
@@ -751,13 +735,10 @@ public class ControllerQuiz {
             login();
         }
     }
-
+    
     private boolean inform(String mensagem, String titulo) {
-        int dialogResult = JOptionPane.showConfirmDialog(guiTest,
-                mensagem, titulo, JOptionPane.YES_NO_OPTION);
-        return dialogResult == 0;
-
-    }
+        return UtilGui.inform(guiTest, mensagem, titulo);
+    }    
 
     class ActionsGuiLogin implements ActionListener {
         // controle dos botões do GUI Login

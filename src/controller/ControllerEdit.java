@@ -3,20 +3,12 @@ package controller;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -106,28 +98,7 @@ public class ControllerEdit {
     }
 
     private String selectFile(String path, boolean action) {
-
-        String pathFile = "";
-        JFrame parentFrame = new JFrame();
-
-        JFileChooser fileChooser = new JFileChooser();
-        File workingDirectory = new File(path);
-        fileChooser.setCurrentDirectory(workingDirectory);
-
-        System.out.println("selected " + path);
-
-        int userSelection;
-        if (action) {
-            userSelection = fileChooser.showOpenDialog(parentFrame);
-        } else {
-            userSelection = fileChooser.showSaveDialog(parentFrame);
-        }
-
-        if (userSelection == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
-            pathFile = selectedFile.getAbsolutePath();
-        }
-        return pathFile;
+        return UtilGui.selectFile(path, action);
     }
 
     private void exitEdit() {
@@ -259,8 +230,6 @@ public class ControllerEdit {
             for (int i = 1; i <= currentQuestions.get(currentQuestion).getOptions().size(); i++) {
                 guiEdit.cboxCorrectAnswer.addItem(String.valueOf(i));
             }
-            System.out.println(currentQuestions.get(currentQuestion).getNumber() + " "
-                    + currentQuestions.get(currentQuestion).getCorrectAnswer());
             guiEdit.cboxCorrectAnswer.setSelectedIndex(
                     currentQuestions.get(currentQuestion).getCorrectAnswer());
         }
@@ -329,21 +298,7 @@ public class ControllerEdit {
 
     private void updateImageQuestion() {
         String imagePath = pathImages + currentQuestions.get(currentQuestion).getPathImage();
-        //System.out.println(imagePath);
-        try {
-            BufferedImage imgOriginal = ImageIO.read(new File(imagePath));
-            Image img = imgOriginal.getScaledInstance(
-                    guiEdit.lblImage.getWidth(),
-                    guiEdit.lblImage.getHeight(),
-                    Image.SCALE_SMOOTH);
-            ImageIcon imgLabel = new ImageIcon(img);
-            guiEdit.lblImage.setText("");
-            guiEdit.lblImage.setIcon(imgLabel);
-        } catch (IOException ex) {
-            String str = "Questão sem imagem disponível!";
-            guiEdit.lblImage.setText(str);
-            guiEdit.lblImage.setIcon(null);
-        }
+        UtilGui.updateImage(guiEdit.lblImage, imagePath, "imagem indisponível!");
     }
 
     private String format() {
@@ -374,10 +329,7 @@ public class ControllerEdit {
     }
 
     private boolean inform(String mensagem, String titulo) {
-        int dialogResult = JOptionPane.showConfirmDialog(guiEdit,
-                mensagem, titulo, JOptionPane.YES_NO_OPTION);
-        return dialogResult == 0;
-
+        return UtilGui.inform(guiEdit, mensagem, titulo);
     }
 
     class ActionsGuiTest implements ActionListener {
