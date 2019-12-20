@@ -38,7 +38,6 @@ public class GuiEdit extends javax.swing.JFrame {
         btnClearTheme = new javax.swing.JToggleButton();
         btnClearOptions = new javax.swing.JToggleButton();
         btnClearQuestion = new javax.swing.JToggleButton();
-        btnSaveQuestion = new javax.swing.JToggleButton();
         jLabel1 = new javax.swing.JLabel();
         cboxCorrectAnswer = new javax.swing.JComboBox<>();
         txtData = new javax.swing.JTextField();
@@ -174,12 +173,9 @@ public class GuiEdit extends javax.swing.JFrame {
         btnClearQuestion.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnClearQuestion.setText("Limpar Questão");
 
-        btnSaveQuestion.setText("Confirmar Alterações");
-        btnSaveQuestion.setToolTipText("");
-
         jLabel1.setText("Alternativa Correta:");
 
-        cboxCorrectAnswer.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Vazio" }));
+        cboxCorrectAnswer.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1" }));
         cboxCorrectAnswer.setToolTipText("Indique a resposta da questão.");
 
         txtData.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -217,10 +213,7 @@ public class GuiEdit extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(panelTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panelBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(panelTestLayout.createSequentialGroup()
-                        .addComponent(lblInform, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSaveQuestion, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(lblInform, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         panelTestLayout.setVerticalGroup(
@@ -251,10 +244,8 @@ public class GuiEdit extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblInform, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSaveQuestion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblInform, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(11, 11, 11)
                 .addComponent(panelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -343,7 +334,6 @@ public class GuiEdit extends javax.swing.JFrame {
     public javax.swing.JButton btnLoad;
     public javax.swing.JButton btnNext;
     public javax.swing.JButton btnPrevious;
-    public javax.swing.JToggleButton btnSaveQuestion;
     public javax.swing.JComboBox<String> cboxCorrectAnswer;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -371,7 +361,7 @@ public class GuiEdit extends javax.swing.JFrame {
         this.btnClearTheme.addActionListener(ev);
         this.btnClearQuestion.addActionListener(ev);
         this.btnClearOptions.addActionListener(ev);
-        this.btnSaveQuestion.addActionListener(ev);
         this.btnImage.addActionListener(ev);
+        this.cboxCorrectAnswer.addActionListener(ev);
     }
 }

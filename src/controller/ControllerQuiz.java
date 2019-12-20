@@ -77,6 +77,7 @@ public class ControllerQuiz {
     private boolean congratulations;
     private boolean answered;
     private boolean seeAll;
+    private boolean openMenu;
 
     private static final String TEST = "Test";
     private static final String GUEST = "Visitante";
@@ -114,6 +115,12 @@ public class ControllerQuiz {
         guiLogin.eventLogin(new ActionsGuiLogin());
         guiLogin.setAlwaysOnTop(true);
         guiLogin.setResizable(false);
+        guiLogin.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent evt) {
+                exitQuiz();
+            }
+        });
 
         // GUI Result
         guiResult = new GuiResult();
@@ -384,8 +391,12 @@ public class ControllerQuiz {
     }
 
     private void exitQuiz() {
-        System.out.println("close application ...");
-        System.exit(0);
+        System.out.println("close application in quiz mode ...");
+        if (openMenu) {
+            guiTest.dispose();
+        } else {
+            System.exit(0);
+        }
     }
 
     private void startTest(String file) {
@@ -465,7 +476,7 @@ public class ControllerQuiz {
         }
 
         String[] str = questions.get(0).split(Util.DELIM);
-        Question q = new Question(0, str[0], null, null);
+        Question q = new Question(0, str[0], 0, null);
         currentTest.add(q);
 
         int number = 1;
@@ -475,7 +486,7 @@ public class ControllerQuiz {
             if (str.length > 4) {
                 if (currentTheme.equals(str[2]) || seeAll) {
                     // Question(numero da questão, questao, resposta, pathImagem)          
-                    q = new Question(number++, str[3], str[1], str[0]);
+                    q = new Question(number++, str[3], Integer.parseInt(str[1]), str[0]);
                     for (int j = 4; j < str.length; j++) {
                         options.add(str[j]);
                     }
@@ -529,7 +540,7 @@ public class ControllerQuiz {
             }
         }
         // checar se a resposta escolhida está certa
-        if (currentTest.get(currentQuestion).getAnswer().equals(String.valueOf(row))) {
+        if (row == currentTest.get(currentQuestion).getCorrectAnswer()) {
             currentTest.get(currentQuestion).setHit(true);
         } else {
             currentTest.get(currentQuestion).setHit(false);
@@ -650,8 +661,8 @@ public class ControllerQuiz {
                     for (int j = 0; j < currentTest.get(i).getOptions().size(); j++) {
                         str += j + ") " + currentTest.get(i).getOptions().get(j) + "\n";
                     }
-                    str += "Opção Esperada: " + currentTest.get(i).getAnswer();
-                    str += ") " + currentTest.get(i).getOptions().get(Integer.parseInt(currentTest.get(i).getAnswer())) + delim;
+                    str += "Opção Esperada: " + currentTest.get(i).getCorrectAnswer();
+                    str += ") " + currentTest.get(i).getOptions().get(currentTest.get(i).getCorrectAnswer()) + delim;
                     if (currentTest.get(i).getCurrentAnswer() != -1) {
                         str += "Opção Escolhida: " + currentTest.get(i).getCurrentAnswer();
                         str += ") " + currentTest.get(i).getOptions().get(currentTest.get(i).getCurrentAnswer()) + delim;
@@ -660,9 +671,9 @@ public class ControllerQuiz {
                     break;
                 default: // export csv
                     str += currentTest.get(i).getNumber() + delim;
-                    str += currentTest.get(i).getAnswer() + delim;
+                    str += currentTest.get(i).getCorrectAnswer() + delim;
                     str += currentTest.get(i).getCurrentAnswer() + delim;
-                    str += "= (" + currentTest.get(i).getAnswer() + "="
+                    str += "= (" + currentTest.get(i).getCorrectAnswer() + "="
                             + currentTest.get(i).getCurrentAnswer() + ")+0"
                             + delim;
             }

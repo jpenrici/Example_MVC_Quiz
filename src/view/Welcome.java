@@ -33,7 +33,7 @@ public class Welcome extends javax.swing.JFrame {
         lblWelcome3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("MENU");
+        setTitle("JQUIZ - MENU");
 
         btnWelcome1.setText("btn 1");
 

@@ -1,5 +1,6 @@
 package controller;
 
+import java.awt.Frame;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,8 +17,8 @@ import view.Welcome;
 
 public class ControllerWelcome {
 
-    private final static String LOCAL = Util.userDir();
-    private final static String PROP = LOCAL + "/resources/resources.properties";
+    private final static String LOCAL = Controller.LOCAL;
+    private final static String PROP = Controller.PROP;
 
     private String pathImagesGui;
     private Welcome guiWelcome = null;
@@ -58,10 +59,10 @@ public class ControllerWelcome {
             System.err.println("error loading properties ...");
         }
     }
-
+    
     private void close() {
-        System.out.println("close welcome ...");
-        guiWelcome.setVisible(false);
+            System.out.println("minimize welcome ...");
+            guiWelcome.setState(Frame.ICONIFIED);
     }
 
     private void exitWelcome() {
@@ -78,15 +79,15 @@ public class ControllerWelcome {
             Object source = ev.getSource();
             if (source == guiWelcome.btnWelcome1) { // Editar Teste existente
                 close();
-                ControllerEdit newController = new ControllerEdit(false);
+                ControllerEdit display = new ControllerEdit(false, true);
             }
             if (source == guiWelcome.btnWelcome2) { // Criar Novo Teste
                 close();
-                ControllerEdit newController = new ControllerEdit(true);
+                ControllerEdit display = new ControllerEdit(true, true);
             }
             if (source == guiWelcome.btnWelcome3) { // Abrir Quiz
                 close();
-                ControllerQuiz newController = new ControllerQuiz();
+                ControllerQuiz display = new ControllerQuiz();
             }
         }
     }

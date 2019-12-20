@@ -7,17 +7,17 @@ public class Question {
     private final int number;
     private String question;
     private String theme;
-    private String correctAnswer;
+    private int correctAnswer;
     private String pathImage;
     private int currentAnswer;
     private boolean hit;
     private ArrayList<String> options;
 
-    public Question(int number, String question, String answer,
+    public Question(int number, String question, int correctAnswer,
             String pathImage) {
         this.number = number;
         this.question = question;
-        this.correctAnswer = answer;
+        this.correctAnswer = correctAnswer;
         this.pathImage = pathImage;
         theme = "";
         options = new ArrayList<>();
@@ -37,7 +37,7 @@ public class Question {
         return theme;
     }
 
-    public String getAnswer() {
+    public int getCorrectAnswer() {
         return correctAnswer;
     }
 
@@ -61,7 +61,7 @@ public class Question {
         this.question = question;
     }
     
-    public void setCorrectAnswer(String correctAnswer) {
+    public void setCorrectAnswer(int correctAnswer) {
         this.correctAnswer = correctAnswer;
     }
     
@@ -89,7 +89,7 @@ public class Question {
     public String toString() {
         String str = "Tema: " + theme 
                 + "\nQuestão: " + number + "\nPergunta: " + question
-                + "\nResposta: " + correctAnswer + "\nImagem: " + pathImage
+                + "\nResposta Correta: " + correctAnswer + "\nImagem: " + pathImage
                 + "\nAlternativas:\n";
         str = options.stream().map((s) -> s + "\n").reduce(str, String::concat);
         return str;
