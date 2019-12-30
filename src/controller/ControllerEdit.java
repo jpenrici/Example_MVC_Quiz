@@ -127,7 +127,7 @@ public class ControllerEdit {
         if (!newTest) {
             // Arquivo selecionado
             if (loadQuestions(currentPath)) { // carregar questões
-                currentTheme = currentQuestions.get(currentQuestion).getTheme();
+                currentTheme = currentQuestions.get(currentQuestion).theme;
             }
         }
 
@@ -168,8 +168,8 @@ public class ControllerEdit {
             for (int j = 0; j < minOptions; j++) {
                 array.add("-");
             }
-            q.setTheme(currentTheme);
-            q.setOptions(array);
+            q.theme = currentTheme;
+            q.options = array;
             currentQuestions.add(q);
         }
     }
@@ -195,8 +195,8 @@ public class ControllerEdit {
                 for (int j = 4; j < str.length; j++) {
                     options.add(str[j]);
                 }
-                q.setTheme(str[2]);
-                q.setOptions(options);
+                q.theme = str[2];
+                q.options = options;
                 currentQuestions.add(q);
                 emptyQuestions = false;
             }
@@ -214,24 +214,24 @@ public class ControllerEdit {
 
         // atualizar questão
         updateReports("Editando questão "
-                + currentQuestions.get(currentQuestion).getNumber() + " de "
+                + currentQuestions.get(currentQuestion).number + " de "
                 + Integer.toString(currentQuestions.size() - 1) + " ...");
 
         guiEdit.txtAreaQuestion.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-        guiEdit.txtAreaQuestion.setText(currentQuestions.get(currentQuestion).getQuestion());
-        guiEdit.txtData.setText(currentQuestions.get(currentQuestion).getTheme());
+        guiEdit.txtAreaQuestion.setText(currentQuestions.get(currentQuestion).question);
+        guiEdit.txtData.setText(currentQuestions.get(currentQuestion).theme);
 
         // atualizar alternativas na tabela
-        updateOptions(currentQuestions.get(currentQuestion).getCorrectAnswer(), false);
+        updateOptions(currentQuestions.get(currentQuestion).correctAnswer, false);
 
         // atualizar alternativa correta
-        if (!currentQuestions.get(currentQuestion).getOptions().isEmpty()) {
+        if (!currentQuestions.get(currentQuestion).options.isEmpty()) {
             guiEdit.cboxCorrectAnswer.removeAllItems();
-            for (int i = 1; i <= currentQuestions.get(currentQuestion).getOptions().size(); i++) {
+            for (int i = 1; i <= currentQuestions.get(currentQuestion).options.size(); i++) {
                 guiEdit.cboxCorrectAnswer.addItem(String.valueOf(i));
             }
             guiEdit.cboxCorrectAnswer.setSelectedIndex(
-                    currentQuestions.get(currentQuestion).getCorrectAnswer());
+                    currentQuestions.get(currentQuestion).correctAnswer);
         }
 
         // atualizar imagem da questão
@@ -240,25 +240,25 @@ public class ControllerEdit {
 
     private void changeQuestion() {
         // registra modificações na questão, sem salvar!
-        currentQuestions.get(currentQuestion).setQuestion(guiEdit.txtAreaQuestion.getText());
-        currentQuestions.get(currentQuestion).setTheme(guiEdit.txtData.getText());
+        currentQuestions.get(currentQuestion).question = guiEdit.txtAreaQuestion.getText();
+        currentQuestions.get(currentQuestion).theme = guiEdit.txtData.getText();
 
         ArrayList<String> options = new ArrayList<>();
         for (int i = 0; i < guiEdit.tbOptions.getRowCount(); i++) {
             String value = guiEdit.tbOptions.getValueAt(i, 1).toString();
             options.add(value);
         }
-        currentQuestions.get(currentQuestion).setOptions(options);
+        currentQuestions.get(currentQuestion).options = options;
 
         if (guiEdit.cboxCorrectAnswer.getSelectedItem() != null) {
-            currentQuestions.get(currentQuestion).setCorrectAnswer(
-                    guiEdit.cboxCorrectAnswer.getSelectedIndex());
+            currentQuestions.get(currentQuestion).correctAnswer
+                    = guiEdit.cboxCorrectAnswer.getSelectedIndex();
         }
     }
 
     private void updateOptions(int chosenOption, boolean clear) {
         // atualizar alternativas no JTable
-        ArrayList<String> options = currentQuestions.get(currentQuestion).getOptions();
+        ArrayList<String> options = currentQuestions.get(currentQuestion).options;
         String[][] elements = new String[options.size()][2];
         for (int i = 0; i < options.size(); i++) {
             if (clear) {
@@ -275,7 +275,7 @@ public class ControllerEdit {
 
         guiEdit.tbOptions.setModel(new DefaultTableModel(elements, new String[]{
             "Nº", "Alternativas para questão "
-            + String.valueOf(currentQuestions.get(currentQuestion).getNumber())
+            + String.valueOf(currentQuestions.get(currentQuestion).number)
         }
         ) {
             boolean[] canEdit = new boolean[]{false, false};
@@ -297,7 +297,7 @@ public class ControllerEdit {
     }
 
     private void updateImageQuestion() {
-        String imagePath = pathImages + currentQuestions.get(currentQuestion).getPathImage();
+        String imagePath = pathImages + currentQuestions.get(currentQuestion).pathImage;
         UtilGui.updateImage(guiEdit.lblImage, imagePath, "imagem indisponível!");
     }
 
@@ -309,10 +309,10 @@ public class ControllerEdit {
         output = "Test;local image;answer number;theme;question;options...\n";
         for (int i = 1; i < currentQuestions.size(); i++) {
             Question q = currentQuestions.get(i);
-            output += q.getPathImage() + delim + q.getCorrectAnswer() + delim
-                    + q.getTheme() + delim + q.getQuestion() + delim;
-            for (int j = 0; j < q.getOptions().size(); j++) {
-                output += q.getOptions().get(j) + delim;
+            output += q.pathImage + delim + q.correctAnswer + delim
+                    + q.theme + delim + q.question + delim;
+            for (int j = 0; j < q.options.size(); j++) {
+                output += q.options.get(j) + delim;
             }
             output += "\n" + delim + delim + delim + "\n";
         }
@@ -375,7 +375,7 @@ public class ControllerEdit {
                     if (str.length > 1) {
                         imagePath = str[str.length - 1];
                     }
-                    currentQuestions.get(currentQuestion).setPathImage(imagePath);
+                    currentQuestions.get(currentQuestion).pathImage = imagePath;
                     changeQuestion();
                     updateImageQuestion();
                 } else {
@@ -384,7 +384,7 @@ public class ControllerEdit {
             }
 
             if (source == guiEdit.btnClearOptions) {
-                updateOptions(currentQuestions.get(currentQuestion).getCurrentAnswer(), true);
+                updateOptions(currentQuestions.get(currentQuestion).currentAnswer, true);
             }
 
             if (source == guiEdit.btnClearQuestion) {

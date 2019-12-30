@@ -410,7 +410,7 @@ public class ControllerQuiz {
             }
 
             // atualizar o tempo para contagem regressiva
-            if (!currentTest.get(0).getQuestion().equals(TEST)) {
+            if (!currentTest.get(0).question.equals(TEST)) {
                 System.out.println("hidden time counter ...");
                 guiTest.lblTimer.setVisible(false);
                 //guiTest.lblTimerText.setVisible(false);
@@ -488,7 +488,7 @@ public class ControllerQuiz {
                     for (int j = 4; j < str.length; j++) {
                         options.add(str[j]);
                     }
-                    q.setOptions(options);
+                    q.options = options;
                     currentTest.add(q);
                     emptyQuestions = false;
                 }
@@ -506,14 +506,14 @@ public class ControllerQuiz {
         }
 
         // atualizar questão
-        String str = "Questão " + currentTest.get(currentQuestion).getNumber()
+        String str = "Questão " + currentTest.get(currentQuestion).number
                 + " de " + Integer.toString(currentTest.size() - 1) + ":\n"
-                + currentTest.get(currentQuestion).getQuestion();
+                + currentTest.get(currentQuestion).question;
         guiTest.txtAreaQuestion.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
         guiTest.txtAreaQuestion.setText(str);
 
         // atualizar alternativas na tabela
-        updateOptions(currentTest.get(currentQuestion).getCurrentAnswer());
+        updateOptions(currentTest.get(currentQuestion).currentAnswer);
 
         // atualizar informe (help)
         updateReports();
@@ -527,30 +527,30 @@ public class ControllerQuiz {
 
     private void updateSavedResponses(int row) {
         // salvar a resposta escolhida pelo usuário
-        int optionSaved = currentTest.get(currentQuestion).getCurrentAnswer();
+        int optionSaved = currentTest.get(currentQuestion).currentAnswer;
         if (optionSaved == -1) { // se questão sem resposta, atualizar
-            currentTest.get(currentQuestion).setCurrentAnswer(row);
+            currentTest.get(currentQuestion).currentAnswer = row;
         } else {
             if (optionSaved != row) {
                 if (inform("Deseja trocar a alternativa?", "Atenção")) {
-                    currentTest.get(currentQuestion).setCurrentAnswer(row);
+                    currentTest.get(currentQuestion).currentAnswer = row;
                 }
             }
         }
         // checar se a resposta escolhida está certa
-        if (row == currentTest.get(currentQuestion).getCorrectAnswer()) {
-            currentTest.get(currentQuestion).setHit(true);
+        if (row == currentTest.get(currentQuestion).correctAnswer) {
+            currentTest.get(currentQuestion).hit = true;
         } else {
-            currentTest.get(currentQuestion).setHit(false);
+            currentTest.get(currentQuestion).hit = false;
         }
-        updateOptions(currentTest.get(currentQuestion).getCurrentAnswer());
+        updateOptions(currentTest.get(currentQuestion).currentAnswer);
         updateSummary();
         updateReports();
     }
 
     private void updateOptions(int chosenOption) {
         // atualizar alternativas no JTable
-        ArrayList<String> options = currentTest.get(currentQuestion).getOptions();
+        ArrayList<String> options = currentTest.get(currentQuestion).options;
         String[][] elements = new String[options.size()][1];
         for (int i = 0; i < options.size(); i++) {
             if (chosenOption == i) {
@@ -562,7 +562,7 @@ public class ControllerQuiz {
 
         guiTest.tbOptions.setModel(new DefaultTableModel(elements, new String[]{
             "Alternativas para questão "
-            + String.valueOf(currentTest.get(currentQuestion).getNumber())
+            + String.valueOf(currentTest.get(currentQuestion).number)
         }
         ) {
             boolean[] canEdit = new boolean[]{false};
@@ -579,7 +579,7 @@ public class ControllerQuiz {
     private void updateReports() {
         // atualizar informe sobre a questão
         String info;
-        int optionSaved = currentTest.get(currentQuestion).getCurrentAnswer();
+        int optionSaved = currentTest.get(currentQuestion).currentAnswer;
         if (optionSaved == -1) {
             info = "Questão sem resposta!";
             if (!congratulations && (countTime >= 0)) {
@@ -587,7 +587,7 @@ public class ControllerQuiz {
             }
         } else {
             info = "Alternativa Selecionada [ ";
-            info += String.valueOf(currentTest.get(currentQuestion).getCurrentAnswer() + 1);
+            info += String.valueOf(currentTest.get(currentQuestion).currentAnswer + 1);
             info += " ]. ";
             if (!congratulations && (countTime >= 0)) {
                 info += "Para alterar selecione outra alternativa.";
@@ -597,7 +597,7 @@ public class ControllerQuiz {
     }
 
     private void updateImageQuestion() {
-        String imagePath = pathImages + currentTest.get(currentQuestion).getPathImage();
+        String imagePath = pathImages + currentTest.get(currentQuestion).pathImage;
         UtilGui.updateImage(guiTest.lblImage, imagePath, "imagem indisponível!");
     }
 
@@ -637,34 +637,34 @@ public class ControllerQuiz {
         for (int i = 1; i < currentTest.size(); i++) {
             switch (output) {
                 case 0: // txtAreaSummary
-                    str += currentTest.get(i).getNumber() + ") ";
+                    str += currentTest.get(i).number + ") ";
                     break;
                 case 1: // export txt
-                    str += delim + currentTest.get(i).getQuestion() + delim;
+                    str += delim + currentTest.get(i).question + delim;
                     str += "Opções:" + delim;
-                    for (int j = 0; j < currentTest.get(i).getOptions().size(); j++) {
-                        str += j + ") " + currentTest.get(i).getOptions().get(j) + "\n";
+                    for (int j = 0; j < currentTest.get(i).options.size(); j++) {
+                        str += j + ") " + currentTest.get(i).options.get(j) + "\n";
                     }
-                    str += "Opção Esperada: " + currentTest.get(i).getCorrectAnswer();
-                    str += ") " + currentTest.get(i).getOptions().get(currentTest.get(i).getCorrectAnswer()) + delim;
-                    if (currentTest.get(i).getCurrentAnswer() != -1) {
-                        str += "Opção Escolhida: " + currentTest.get(i).getCurrentAnswer();
-                        str += ") " + currentTest.get(i).getOptions().get(currentTest.get(i).getCurrentAnswer()) + delim;
+                    str += "Opção Esperada: " + currentTest.get(i).correctAnswer;
+                    str += ") " + currentTest.get(i).options.get(currentTest.get(i).correctAnswer) + delim;
+                    if (currentTest.get(i).currentAnswer != -1) {
+                        str += "Opção Escolhida: " + currentTest.get(i).currentAnswer;
+                        str += ") " + currentTest.get(i).options.get(currentTest.get(i).currentAnswer) + delim;
                     }
                     str += "Situação: ";
                     break;
                 default: // export csv
-                    str += currentTest.get(i).getNumber() + delim;
-                    str += currentTest.get(i).getCorrectAnswer() + delim;
-                    str += currentTest.get(i).getCurrentAnswer() + delim;
-                    str += "= (" + currentTest.get(i).getCorrectAnswer() + "="
-                            + currentTest.get(i).getCurrentAnswer() + ")+0"
+                    str += currentTest.get(i).number + delim;
+                    str += currentTest.get(i).correctAnswer + delim;
+                    str += currentTest.get(i).currentAnswer + delim;
+                    str += "= (" + currentTest.get(i).correctAnswer + "="
+                            + currentTest.get(i).currentAnswer + ")+0"
                             + delim;
             }
 
-            if (currentTest.get(i).getCurrentAnswer() != -1) {
+            if (currentTest.get(i).currentAnswer != -1) {
                 answered = true;
-                if (currentTest.get(i).getHit()) {
+                if (currentTest.get(i).hit) {
                     str += " acertou" + delim;
                     currentHits++;
                 } else {
@@ -675,8 +675,8 @@ public class ControllerQuiz {
             }
 
             if (output == 2) {
-                str += delim + currentTest.get(i).getQuestion() + delim;
-                str = currentTest.get(i).getOptions().stream().map((s)
+                str += delim + currentTest.get(i).question + delim;
+                str = currentTest.get(i).options.stream().map((s)
                         -> s + delim).reduce(str, String::concat);
                 str += "\n";
             }
@@ -694,7 +694,7 @@ public class ControllerQuiz {
 
     private void updateSummary() {
         // atualizar resumo
-        if (!currentTest.get(0).getQuestion().equals(TEST)) {
+        if (!currentTest.get(0).question.equals(TEST)) {
             txtAreaSummary.setText(ALERT);
         } else {
             String summary = formatAnswers(0);
@@ -727,7 +727,7 @@ public class ControllerQuiz {
         Util.export(summaryTXT, path + ".txt");
 
         // exibir resumo (resultados)
-        if (!currentTest.get(0).getQuestion().equals(TEST)) {
+        if (!currentTest.get(0).question.equals(TEST)) {
             guiResult.txtAreaSummary.setText(formatAnswers(1));
             guiTest.setVisible(false);
             guiResult.setVisible(true);
@@ -896,7 +896,7 @@ public class ControllerQuiz {
             setText(String.valueOf(value));
 
             // checar se questão tem alternativa salva
-            if (row == currentTest.get(currentQuestion).getCurrentAnswer()) {
+            if (row == currentTest.get(currentQuestion).currentAnswer) {
                 setBackground(optionColor);
             } else {
                 setBackground(null);
