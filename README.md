@@ -1,4 +1,4 @@
-# Example_MVC_Quiz
+# Simple_Quiz
 
 Example of using the MVC model in Java: Application QUIZ.
 
@@ -18,10 +18,10 @@ Example of using the MVC model in Java: Application QUIZ.
 	Create new test: --new
 
 # Display
-![Login](https://github.com/jpenrici/Example_MVC_Quiz/blob/master/display/display_welcome.png)
+![Login](https://github.com/jpenrici/Simple_Quiz/blob/master/display/display_welcome.png)
 
-![Login](https://github.com/jpenrici/Example_MVC_Quiz/blob/master/display/display_login.png)
+![Login](https://github.com/jpenrici/Simple_Quiz/blob/master/display/display_login.png)
 
-![Test](https://github.com/jpenrici/Example_MVC_Quiz/blob/master/display/display_quiz_1.png)
+![Test](https://github.com/jpenrici/Simple_Quiz/blob/master/display/display_quiz_1.png)
 
-![Edit](https://github.com/jpenrici/Example_MVC_Quiz/blob/master/display/display_edit_1.png)
+![Edit](https://github.com/jpenrici/Simple_Quiz/blob/master/display/display_edit_1.png)
